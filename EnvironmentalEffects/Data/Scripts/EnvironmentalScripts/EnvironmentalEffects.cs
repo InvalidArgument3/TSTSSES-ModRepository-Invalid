@@ -4,18 +4,26 @@ using VRage.Game.Components;
 using VRage.Game.ModAPI;
 using VRage.ModAPI;
 
-[MySessionComponentDescriptor(MyUpdateOrder.BeforeSimulation)]
+[MySessionComponentDescriptor(MyUpdateOrder.AfterSimulation)]
 public class DurabilityModifierSession : MySessionComponentBase
 {
     private const float DurabilityModifier = 0.1f;
     private bool _isInitialized = false;
+    private Queue<IMyCubeGrid> gridQueue = new Queue<IMyCubeGrid>();
 
-    public override void UpdateBeforeSimulation()
+    public override void UpdateAfterSimulation()
     {
         if (!_isInitialized && MyAPIGateway.Session != null)
         {
             Initialize();
             _isInitialized = true;
+            return;
+        }
+
+        for (int i = 0; i < 10 && gridQueue.Count > 0; i++)
+        {
+            IMyCubeGrid grid = gridQueue.Dequeue();
+            ApplyDurabilityModifier(grid, DurabilityModifier);
         }
     }
 
@@ -24,13 +32,12 @@ public class DurabilityModifierSession : MySessionComponentBase
         HashSet<IMyEntity> allEntities = new HashSet<IMyEntity>();
         MyAPIGateway.Entities.GetEntities(allEntities, e => e is IMyCubeGrid);
 
-        foreach (var entity in allEntities)
+        foreach (IMyEntity entity in allEntities)
         {
-            // Check and cast
             if (entity is IMyCubeGrid)
             {
-                IMyCubeGrid grid = (IMyCubeGrid)entity;
-                ApplyDurabilityModifier(grid, DurabilityModifier);
+                IMyCubeGrid grid = entity as IMyCubeGrid;
+                gridQueue.Enqueue(grid);
             }
         }
 
@@ -39,27 +46,26 @@ public class DurabilityModifierSession : MySessionComponentBase
 
     private void OnEntityAdd(IMyEntity entity)
     {
-        // Check and cast
         if (entity is IMyCubeGrid)
         {
             IMyCubeGrid grid = entity as IMyCubeGrid;
-            ApplyDurabilityModifier(grid, DurabilityModifier);
+            gridQueue.Enqueue(grid);
         }
     }
 
     private void ApplyDurabilityModifier(IMyCubeGrid grid, float modifier)
     {
-        var blocks = new List<IMySlimBlock>();
+        List<IMySlimBlock> blocks = new List<IMySlimBlock>();
         grid.GetBlocks(blocks);
 
-        foreach (var block in blocks)
+        foreach (IMySlimBlock block in blocks)
         {
             block.BlockGeneralDamageModifier = modifier;
         }
 
         if (MyAPIGateway.Session?.Player != null)
         {
-            var message = $"Durability modifier of {modifier}x applied to {grid.DisplayName}";
+            string message = $"Durability modifier of {modifier}x applied to {grid.DisplayName}";
             MyAPIGateway.Utilities.ShowNotification(message, 5000, "Blue");
         }
     }
