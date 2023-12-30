@@ -4,6 +4,8 @@ using VRage.Game.Components;
 using VRage.Game.ModAPI;
 using VRage.ModAPI;
 using DefenseShields;
+using Sandbox.Game;
+using System;
 
 [MySessionComponentDescriptor(MyUpdateOrder.AfterSimulation)]
 public class DurabilityModifierSession : MySessionComponentBase
@@ -12,10 +14,8 @@ public class DurabilityModifierSession : MySessionComponentBase
     private bool _isInitialized = false;
     private bool _isApiInitialized = false;
     private ShieldApi _shieldApi;
-    private List<IMyTerminalBlock> _shieldBlocks = new List<IMyTerminalBlock>();
     private Queue<IMyCubeGrid> gridQueue = new Queue<IMyCubeGrid>();
-
-
+    private DateTime lastQuestLogUpdate = DateTime.MinValue;
 
     public override void UpdateAfterSimulation()
     {
@@ -24,18 +24,29 @@ public class DurabilityModifierSession : MySessionComponentBase
             _shieldApi = new ShieldApi();
             _isApiInitialized = _shieldApi.Load(); // Initialize the API
             Initialize();
+            MyVisualScriptLogicProvider.SetQuestlog(true, "Durability and Shields Status");
             _isInitialized = true;
         }
 
-        for (int i = 0; i < 10 && gridQueue.Count > 0; i++)
+        if (_isInitialized)
         {
-            IMyCubeGrid grid = gridQueue.Dequeue();
-            ApplyDurabilityModifier(grid, DurabilityModifier);
-        }
+            IMyCubeGrid grid;
+            for (int i = 0; i < 10 && gridQueue.Count > 0; i++)
+            {
+                grid = gridQueue.Dequeue();
+                ApplyDurabilityModifier(grid, DurabilityModifier);
+            }
 
-        if (MyAPIGateway.Session.GameplayFrameCounter % 600 == 0)
-        {
-            HealShields();
+            if (MyAPIGateway.Session.GameplayFrameCounter % 600 == 0)
+            {
+                HealShields();
+            }
+
+            if (DateTime.Now - lastQuestLogUpdate > TimeSpan.FromSeconds(10))
+            {
+                MyVisualScriptLogicProvider.RemoveQuestlogDetails();
+                lastQuestLogUpdate = DateTime.Now;
+            }
         }
     }
 
@@ -48,8 +59,7 @@ public class DurabilityModifierSession : MySessionComponentBase
         {
             if (entity is IMyCubeGrid)
             {
-                IMyCubeGrid grid = entity as IMyCubeGrid;
-                gridQueue.Enqueue(grid);
+                gridQueue.Enqueue(entity as IMyCubeGrid);
             }
         }
 
@@ -60,8 +70,7 @@ public class DurabilityModifierSession : MySessionComponentBase
     {
         if (entity is IMyCubeGrid)
         {
-            IMyCubeGrid grid = entity as IMyCubeGrid;
-            gridQueue.Enqueue(grid);
+            gridQueue.Enqueue(entity as IMyCubeGrid);
         }
     }
 
@@ -75,11 +84,8 @@ public class DurabilityModifierSession : MySessionComponentBase
             block.BlockGeneralDamageModifier = modifier;
         }
 
-        if (MyAPIGateway.Session?.Player != null)
-        {
-            string message = $"Durability modifier of {modifier}x applied to {grid.DisplayName}";
-            MyAPIGateway.Utilities.ShowNotification(message, 5000, "Blue");
-        }
+        var message = $"Durability modifier of {modifier}x applied to {grid.DisplayName}";
+        MyVisualScriptLogicProvider.AddQuestlogObjective(message, false, true);
     }
 
     private void HealShields()
@@ -90,25 +96,20 @@ public class DurabilityModifierSession : MySessionComponentBase
         foreach (IMyEntity entity in allEntities)
         {
             var grid = entity as IMyCubeGrid;
-            if (grid == null) continue; // Skip if for some reason the cast failed
-
-            var shieldBlock = _shieldApi.GetShieldBlock(grid);
-            if (shieldBlock != null)
+            if (grid != null)
             {
-                // Assuming 1 million shield HP to heal
-                float healAmount = 1000000;
-                _shieldApi.SetCharge(shieldBlock, _shieldApi.GetCharge(shieldBlock) + healAmount);
-
-                // Optional: Notify the player that shields have been healed
-                if (MyAPIGateway.Session?.Player != null)
+                var shieldBlock = _shieldApi.GetShieldBlock(grid);
+                if (shieldBlock != null)
                 {
-                    string message = $"Healed 1 million HP on shields of {grid.DisplayName}";
-                    MyAPIGateway.Utilities.ShowNotification(message, 2000, "Blue");
+                    float healAmount = 1000000; // Assuming 1 million shield HP to heal
+                    _shieldApi.SetCharge(shieldBlock, _shieldApi.GetCharge(shieldBlock) + healAmount);
+
+                    var message = $"Healed 1 million HP on shields of {grid.DisplayName}";
+                    MyVisualScriptLogicProvider.AddQuestlogObjective(message, false, true);
                 }
             }
         }
     }
-
 
     protected override void UnloadData()
     {
