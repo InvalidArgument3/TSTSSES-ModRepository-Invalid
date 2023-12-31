@@ -12,14 +12,11 @@ public class EnvEffectsPulsar : MySessionComponentBase
 {
     private const float DurabilityModifier = 0.1f;
     private bool _isInitialized = false;
-    private bool _isApiInitialized = false;
     private ShieldApi _shieldApi;
     private Queue<IMyCubeGrid> gridQueue = new Queue<IMyCubeGrid>();
-    private Queue<IMyReactor> reactorQueue = new Queue<IMyReactor>();
     private DateTime lastQuestLogUpdate = DateTime.MinValue;
     private int reactorUpdateCounter = 0;
     private int reactorUpdateInterval = 600; // 600 frames = 10 seconds
-    private bool reactorQueueInitialized = false;
     private float reactorOutputMultiplier = 2f; // Set the reactor output multiplier here
 
     public override void UpdateAfterSimulation()
@@ -27,7 +24,7 @@ public class EnvEffectsPulsar : MySessionComponentBase
         if (!_isInitialized && MyAPIGateway.Session != null)
         {
             _shieldApi = new ShieldApi();
-            _isApiInitialized = _shieldApi.Load(); // Initialize the API
+            _shieldApi.Load(); // Initialize the API
             Initialize();
             MyVisualScriptLogicProvider.SetQuestlog(true, "Durability and Shields Status");
             _isInitialized = true;
@@ -49,13 +46,6 @@ public class EnvEffectsPulsar : MySessionComponentBase
                 HealShields();
             }
 
-            // Queue reactor updates if not already initialized
-            if (!reactorQueueInitialized)
-            {
-                QueueReactorUpdates();
-                reactorQueueInitialized = true;
-            }
-
             // Process reactor updates
             ProcessReactorUpdates();
 
@@ -70,17 +60,6 @@ public class EnvEffectsPulsar : MySessionComponentBase
 
     private void Initialize()
     {
-        HashSet<IMyEntity> allEntities = new HashSet<IMyEntity>();
-        MyAPIGateway.Entities.GetEntities(allEntities, e => e is IMyCubeGrid);
-
-        foreach (IMyEntity entity in allEntities)
-        {
-            if (entity is IMyCubeGrid)
-            {
-                gridQueue.Enqueue(entity as IMyCubeGrid);
-            }
-        }
-
         MyAPIGateway.Entities.OnEntityAdd += OnEntityAdd;
     }
 
@@ -89,6 +68,7 @@ public class EnvEffectsPulsar : MySessionComponentBase
         if (entity is IMyCubeGrid)
         {
             gridQueue.Enqueue(entity as IMyCubeGrid);
+            QueueReactorUpdates(entity as IMyCubeGrid);
         }
     }
 
@@ -129,27 +109,17 @@ public class EnvEffectsPulsar : MySessionComponentBase
         }
     }
 
-    private void QueueReactorUpdates()
+    private void QueueReactorUpdates(IMyCubeGrid grid)
     {
-        var allEntities = new HashSet<IMyEntity>();
-        MyAPIGateway.Entities.GetEntities(allEntities, e => e is IMyCubeGrid);
+        var blocks = new List<IMySlimBlock>();
+        grid.GetBlocks(blocks, block => block.FatBlock is IMyReactor);
 
-        foreach (IMyEntity entity in allEntities)
+        foreach (var block in blocks)
         {
-            var grid = entity as IMyCubeGrid;
-            if (grid != null)
+            var reactor = block.FatBlock as IMyReactor;
+            if (reactor != null)
             {
-                var blocks = new List<IMySlimBlock>();
-                grid.GetBlocks(blocks, block => block.FatBlock is IMyReactor);
-
-                foreach (var block in blocks)
-                {
-                    var reactor = block.FatBlock as IMyReactor;
-                    if (reactor != null)
-                    {
-                        reactorQueue.Enqueue(reactor);
-                    }
-                }
+                UpdateReactorOutput(reactor, reactorOutputMultiplier);
             }
         }
     }
@@ -160,12 +130,6 @@ public class EnvEffectsPulsar : MySessionComponentBase
 
         if (reactorUpdateCounter >= reactorUpdateInterval)
         {
-            while (reactorQueue.Count > 0)
-            {
-                var reactor = reactorQueue.Dequeue();
-                UpdateReactorOutput(reactor, reactorOutputMultiplier); // Apply the multiplier
-            }
-
             reactorUpdateCounter = 0;
         }
     }
@@ -181,11 +145,5 @@ public class EnvEffectsPulsar : MySessionComponentBase
             var message = $"Reactor output multiplier changed from {oldValue}x to {multiplier}x on {reactor.CubeGrid.DisplayName}";
             MyVisualScriptLogicProvider.AddQuestlogObjective(message, false, false);
         }
-    }
-
-    protected override void UnloadData()
-    {
-        base.UnloadData();
-        MyAPIGateway.Entities.OnEntityAdd -= OnEntityAdd;
     }
 }
