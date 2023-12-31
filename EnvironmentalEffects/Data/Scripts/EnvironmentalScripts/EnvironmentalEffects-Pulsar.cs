@@ -8,14 +8,19 @@ using Sandbox.Game;
 using System;
 
 [MySessionComponentDescriptor(MyUpdateOrder.AfterSimulation)]
-public class DurabilityModifierSession : MySessionComponentBase
+public class EnvEffectsPulsar : MySessionComponentBase
 {
     private const float DurabilityModifier = 0.1f;
     private bool _isInitialized = false;
     private bool _isApiInitialized = false;
     private ShieldApi _shieldApi;
     private Queue<IMyCubeGrid> gridQueue = new Queue<IMyCubeGrid>();
+    private Queue<IMyReactor> reactorQueue = new Queue<IMyReactor>();
     private DateTime lastQuestLogUpdate = DateTime.MinValue;
+    private int reactorUpdateCounter = 0;
+    private int reactorUpdateInterval = 600; // 600 frames = 10 seconds
+    private bool reactorQueueInitialized = false;
+    private float reactorOutputMultiplier = 2f; // Set the reactor output multiplier here
 
     public override void UpdateAfterSimulation()
     {
@@ -30,6 +35,7 @@ public class DurabilityModifierSession : MySessionComponentBase
 
         if (_isInitialized)
         {
+            // Apply durability modifier
             IMyCubeGrid grid;
             for (int i = 0; i < 10 && gridQueue.Count > 0; i++)
             {
@@ -37,11 +43,23 @@ public class DurabilityModifierSession : MySessionComponentBase
                 ApplyDurabilityModifier(grid, DurabilityModifier);
             }
 
+            // Heal shields
             if (MyAPIGateway.Session.GameplayFrameCounter % 600 == 0)
             {
                 HealShields();
             }
 
+            // Queue reactor updates if not already initialized
+            if (!reactorQueueInitialized)
+            {
+                QueueReactorUpdates();
+                reactorQueueInitialized = true;
+            }
+
+            // Process reactor updates
+            ProcessReactorUpdates();
+
+            // Quest log update
             if (DateTime.Now - lastQuestLogUpdate > TimeSpan.FromSeconds(10))
             {
                 MyVisualScriptLogicProvider.RemoveQuestlogDetails();
@@ -85,7 +103,7 @@ public class DurabilityModifierSession : MySessionComponentBase
         }
 
         var message = $"Durability modifier of {modifier}x applied to {grid.DisplayName}";
-        MyVisualScriptLogicProvider.AddQuestlogObjective(message, false, true);
+        MyVisualScriptLogicProvider.AddQuestlogObjective(message, false, false);
     }
 
     private void HealShields()
@@ -105,9 +123,63 @@ public class DurabilityModifierSession : MySessionComponentBase
                     _shieldApi.SetCharge(shieldBlock, _shieldApi.GetCharge(shieldBlock) + healAmount);
 
                     var message = $"Healed 1 million HP on shields of {grid.DisplayName}";
-                    MyVisualScriptLogicProvider.AddQuestlogObjective(message, false, true);
+                    MyVisualScriptLogicProvider.AddQuestlogObjective(message, false, false);
                 }
             }
+        }
+    }
+
+    private void QueueReactorUpdates()
+    {
+        var allEntities = new HashSet<IMyEntity>();
+        MyAPIGateway.Entities.GetEntities(allEntities, e => e is IMyCubeGrid);
+
+        foreach (IMyEntity entity in allEntities)
+        {
+            var grid = entity as IMyCubeGrid;
+            if (grid != null)
+            {
+                var blocks = new List<IMySlimBlock>();
+                grid.GetBlocks(blocks, block => block.FatBlock is IMyReactor);
+
+                foreach (var block in blocks)
+                {
+                    var reactor = block.FatBlock as IMyReactor;
+                    if (reactor != null)
+                    {
+                        reactorQueue.Enqueue(reactor);
+                    }
+                }
+            }
+        }
+    }
+
+    private void ProcessReactorUpdates()
+    {
+        reactorUpdateCounter++;
+
+        if (reactorUpdateCounter >= reactorUpdateInterval)
+        {
+            while (reactorQueue.Count > 0)
+            {
+                var reactor = reactorQueue.Dequeue();
+                UpdateReactorOutput(reactor, reactorOutputMultiplier); // Apply the multiplier
+            }
+
+            reactorUpdateCounter = 0;
+        }
+    }
+
+    private void UpdateReactorOutput(IMyReactor reactor, float multiplier)
+    {
+        if (reactor != null)
+        {
+            // Update the reactor output
+            var oldValue = reactor.PowerOutputMultiplier;
+            reactor.PowerOutputMultiplier = multiplier;
+
+            var message = $"Reactor output multiplier changed from {oldValue}x to {multiplier}x on {reactor.CubeGrid.DisplayName}";
+            MyVisualScriptLogicProvider.AddQuestlogObjective(message, false, false);
         }
     }
 
