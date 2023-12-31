@@ -12,69 +12,89 @@ public class EnvEffectsPulsar : MySessionComponentBase
 {
     private const float DurabilityModifier = 0.1f;
     private bool _isInitialized = false;
+    private bool _isApiInitialized = false;
     private ShieldApi _shieldApi;
     private Queue<IMyCubeGrid> gridQueue = new Queue<IMyCubeGrid>();
     private DateTime lastQuestLogUpdate = DateTime.MinValue;
-
+    private List<string> questDetails = new List<string>();
 
     public override void UpdateAfterSimulation()
     {
         if (!_isInitialized && MyAPIGateway.Session != null)
         {
             _shieldApi = new ShieldApi();
-            _shieldApi.Load(); // Initialize the API
+            _isApiInitialized = _shieldApi.Load(); // Initialize the API
             Initialize();
-            MyVisualScriptLogicProvider.SetQuestlog(true, "Durability and Shields Status");
+            MyVisualScriptLogicProvider.SetQuestlog(true, "System Effects (Pulsar)");
             _isInitialized = true;
         }
 
         if (_isInitialized)
         {
-            // Apply durability modifier
-            IMyCubeGrid grid;
-            for (int i = 0; i < 10 && gridQueue.Count > 0; i++)
-            {
-                grid = gridQueue.Dequeue();
-                ApplyDurabilityModifier(grid, DurabilityModifier);
-            }
-
-            // Heal shields
-            if (MyAPIGateway.Session.GameplayFrameCounter % 600 == 0)
-            {
-                HealShields();
-            }
-
-
-            // Quest log update
-            if (DateTime.Now - lastQuestLogUpdate > TimeSpan.FromSeconds(10))
-            {
-                MyVisualScriptLogicProvider.RemoveQuestlogDetails();
-                lastQuestLogUpdate = DateTime.Now;
-            }
-
-
-
+            ProcessGrids();
+            ProcessHealShields();
+            UpdateQuestLog();
         }
     }
 
     private void Initialize()
     {
-        MyVisualScriptLogicProvider.SetQuestlog(true, "Durability and Shields Status");
+        EnqueueAllGrids();
+        MyAPIGateway.Entities.OnEntityAdd += OnEntityAdd;
     }
 
+    private void EnqueueAllGrids()
+    {
+        var allGrids = new HashSet<IMyEntity>();
+        MyAPIGateway.Entities.GetEntities(allGrids, e => e is IMyCubeGrid);
+        foreach (IMyCubeGrid grid in allGrids)
+        {
+            gridQueue.Enqueue(grid);
+        }
+    }
+
+    private void ProcessGrids()
+    {
+        for (int i = 0; i < 10 && gridQueue.Count > 0; i++)
+        {
+            var grid = gridQueue.Dequeue();
+            ApplyDurabilityModifier(grid, DurabilityModifier);
+        }
+    }
+
+    private void ProcessHealShields()
+    {
+        if (MyAPIGateway.Session.GameplayFrameCounter % 600 == 0)
+        {
+            HealShields();
+        }
+    }
+
+    private void UpdateQuestLog()
+    {
+        if (DateTime.Now - lastQuestLogUpdate > TimeSpan.FromSeconds(10))
+        {
+            MyVisualScriptLogicProvider.RemoveQuestlogDetails();
+            foreach (var detail in questDetails)
+            {
+                MyVisualScriptLogicProvider.AddQuestlogDetail(detail, false, false);
+            }
+            lastQuestLogUpdate = DateTime.Now;
+        }
+    }
 
     private void ApplyDurabilityModifier(IMyCubeGrid grid, float modifier)
     {
-        List<IMySlimBlock> blocks = new List<IMySlimBlock>();
+        var blocks = new List<IMySlimBlock>();
         grid.GetBlocks(blocks);
 
-        foreach (IMySlimBlock block in blocks)
+        foreach (var block in blocks)
         {
             block.BlockGeneralDamageModifier = modifier;
         }
 
         var message = $"Durability modifier of {modifier}x applied to {grid.DisplayName}";
-        MyVisualScriptLogicProvider.AddQuestlogObjective(message, false, false);
+        questDetails.Add(message);
     }
 
     private void HealShields()
@@ -82,7 +102,7 @@ public class EnvEffectsPulsar : MySessionComponentBase
         var allEntities = new HashSet<IMyEntity>();
         MyAPIGateway.Entities.GetEntities(allEntities, e => e is IMyCubeGrid);
 
-        foreach (IMyEntity entity in allEntities)
+        foreach (var entity in allEntities)
         {
             var grid = entity as IMyCubeGrid;
             if (grid != null)
@@ -94,24 +114,24 @@ public class EnvEffectsPulsar : MySessionComponentBase
                     _shieldApi.SetCharge(shieldBlock, _shieldApi.GetCharge(shieldBlock) + healAmount);
 
                     var message = $"Healed 1 million HP on shields of {grid.DisplayName}";
-                    MyVisualScriptLogicProvider.AddQuestlogObjective(message, false, false);
+                    questDetails.Add(message);
                 }
             }
         }
     }
 
-
-
+    private void OnEntityAdd(IMyEntity entity)
+    {
+        IMyCubeGrid grid = entity as IMyCubeGrid;
+        if (grid != null)
+        {
+            gridQueue.Enqueue(grid);
+        }
+    }
 
     protected override void UnloadData()
     {
-        // Unregister the OnEntityAdd event
-
-        // Perform additional clean-up if necessary
-        // For example, if you had any static references or other persistent data, you would clean them up here.
-
-        // Call base UnloadData to ensure any base logic is executed
-        base.UnloadData();
+        MyAPIGateway.Entities.OnEntityAdd -= OnEntityAdd;
+        // Perform any additional cleanup...
     }
-
 }
