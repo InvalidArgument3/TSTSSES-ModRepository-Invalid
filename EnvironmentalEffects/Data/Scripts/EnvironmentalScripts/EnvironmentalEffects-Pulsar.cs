@@ -15,9 +15,7 @@ public class EnvEffectsPulsar : MySessionComponentBase
     private ShieldApi _shieldApi;
     private Queue<IMyCubeGrid> gridQueue = new Queue<IMyCubeGrid>();
     private DateTime lastQuestLogUpdate = DateTime.MinValue;
-    private int reactorUpdateCounter = 0;
-    private int reactorUpdateInterval = 600; // 600 frames = 10 seconds
-    private float reactorOutputMultiplier = 2f; // Set the reactor output multiplier here
+
 
     public override void UpdateAfterSimulation()
     {
@@ -46,8 +44,6 @@ public class EnvEffectsPulsar : MySessionComponentBase
                 HealShields();
             }
 
-            // Process reactor updates
-            ProcessReactorUpdates();
 
             // Quest log update
             if (DateTime.Now - lastQuestLogUpdate > TimeSpan.FromSeconds(10))
@@ -55,22 +51,17 @@ public class EnvEffectsPulsar : MySessionComponentBase
                 MyVisualScriptLogicProvider.RemoveQuestlogDetails();
                 lastQuestLogUpdate = DateTime.Now;
             }
+
+
+
         }
     }
 
     private void Initialize()
     {
-        MyAPIGateway.Entities.OnEntityAdd += OnEntityAdd;
+        MyVisualScriptLogicProvider.SetQuestlog(true, "Durability and Shields Status");
     }
 
-    private void OnEntityAdd(IMyEntity entity)
-    {
-        if (entity is IMyCubeGrid)
-        {
-            gridQueue.Enqueue(entity as IMyCubeGrid);
-            QueueReactorUpdates(entity as IMyCubeGrid);
-        }
-    }
 
     private void ApplyDurabilityModifier(IMyCubeGrid grid, float modifier)
     {
@@ -109,41 +100,18 @@ public class EnvEffectsPulsar : MySessionComponentBase
         }
     }
 
-    private void QueueReactorUpdates(IMyCubeGrid grid)
-    {
-        var blocks = new List<IMySlimBlock>();
-        grid.GetBlocks(blocks, block => block.FatBlock is IMyReactor);
 
-        foreach (var block in blocks)
-        {
-            var reactor = block.FatBlock as IMyReactor;
-            if (reactor != null)
-            {
-                UpdateReactorOutput(reactor, reactorOutputMultiplier);
-            }
-        }
+
+
+    protected override void UnloadData()
+    {
+        // Unregister the OnEntityAdd event
+
+        // Perform additional clean-up if necessary
+        // For example, if you had any static references or other persistent data, you would clean them up here.
+
+        // Call base UnloadData to ensure any base logic is executed
+        base.UnloadData();
     }
 
-    private void ProcessReactorUpdates()
-    {
-        reactorUpdateCounter++;
-
-        if (reactorUpdateCounter >= reactorUpdateInterval)
-        {
-            reactorUpdateCounter = 0;
-        }
-    }
-
-    private void UpdateReactorOutput(IMyReactor reactor, float multiplier)
-    {
-        if (reactor != null)
-        {
-            // Update the reactor output
-            var oldValue = reactor.PowerOutputMultiplier;
-            reactor.PowerOutputMultiplier = multiplier;
-
-            var message = $"Reactor output multiplier changed from {oldValue}x to {multiplier}x on {reactor.CubeGrid.DisplayName}";
-            MyVisualScriptLogicProvider.AddQuestlogObjective(message, false, false);
-        }
-    }
 }
