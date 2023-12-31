@@ -8,21 +8,21 @@ using Sandbox.Game;
 using System;
 
 [MySessionComponentDescriptor(MyUpdateOrder.AfterSimulation)]
-public class DurabilityModifierSession : MySessionComponentBase
+public class EnvEffectsPulsar : MySessionComponentBase
 {
     private const float DurabilityModifier = 0.1f;
     private bool _isInitialized = false;
-    private bool _isApiInitialized = false;
     private ShieldApi _shieldApi;
     private Queue<IMyCubeGrid> gridQueue = new Queue<IMyCubeGrid>();
     private DateTime lastQuestLogUpdate = DateTime.MinValue;
+
 
     public override void UpdateAfterSimulation()
     {
         if (!_isInitialized && MyAPIGateway.Session != null)
         {
             _shieldApi = new ShieldApi();
-            _isApiInitialized = _shieldApi.Load(); // Initialize the API
+            _shieldApi.Load(); // Initialize the API
             Initialize();
             MyVisualScriptLogicProvider.SetQuestlog(true, "Durability and Shields Status");
             _isInitialized = true;
@@ -30,6 +30,7 @@ public class DurabilityModifierSession : MySessionComponentBase
 
         if (_isInitialized)
         {
+            // Apply durability modifier
             IMyCubeGrid grid;
             for (int i = 0; i < 10 && gridQueue.Count > 0; i++)
             {
@@ -37,42 +38,30 @@ public class DurabilityModifierSession : MySessionComponentBase
                 ApplyDurabilityModifier(grid, DurabilityModifier);
             }
 
+            // Heal shields
             if (MyAPIGateway.Session.GameplayFrameCounter % 600 == 0)
             {
                 HealShields();
             }
 
+
+            // Quest log update
             if (DateTime.Now - lastQuestLogUpdate > TimeSpan.FromSeconds(10))
             {
                 MyVisualScriptLogicProvider.RemoveQuestlogDetails();
                 lastQuestLogUpdate = DateTime.Now;
             }
+
+
+
         }
     }
 
     private void Initialize()
     {
-        HashSet<IMyEntity> allEntities = new HashSet<IMyEntity>();
-        MyAPIGateway.Entities.GetEntities(allEntities, e => e is IMyCubeGrid);
-
-        foreach (IMyEntity entity in allEntities)
-        {
-            if (entity is IMyCubeGrid)
-            {
-                gridQueue.Enqueue(entity as IMyCubeGrid);
-            }
-        }
-
-        MyAPIGateway.Entities.OnEntityAdd += OnEntityAdd;
+        MyVisualScriptLogicProvider.SetQuestlog(true, "Durability and Shields Status");
     }
 
-    private void OnEntityAdd(IMyEntity entity)
-    {
-        if (entity is IMyCubeGrid)
-        {
-            gridQueue.Enqueue(entity as IMyCubeGrid);
-        }
-    }
 
     private void ApplyDurabilityModifier(IMyCubeGrid grid, float modifier)
     {
@@ -85,7 +74,7 @@ public class DurabilityModifierSession : MySessionComponentBase
         }
 
         var message = $"Durability modifier of {modifier}x applied to {grid.DisplayName}";
-        MyVisualScriptLogicProvider.AddQuestlogObjective(message, false, true);
+        MyVisualScriptLogicProvider.AddQuestlogObjective(message, false, false);
     }
 
     private void HealShields()
@@ -105,15 +94,24 @@ public class DurabilityModifierSession : MySessionComponentBase
                     _shieldApi.SetCharge(shieldBlock, _shieldApi.GetCharge(shieldBlock) + healAmount);
 
                     var message = $"Healed 1 million HP on shields of {grid.DisplayName}";
-                    MyVisualScriptLogicProvider.AddQuestlogObjective(message, false, true);
+                    MyVisualScriptLogicProvider.AddQuestlogObjective(message, false, false);
                 }
             }
         }
     }
 
+
+
+
     protected override void UnloadData()
     {
+        // Unregister the OnEntityAdd event
+
+        // Perform additional clean-up if necessary
+        // For example, if you had any static references or other persistent data, you would clean them up here.
+
+        // Call base UnloadData to ensure any base logic is executed
         base.UnloadData();
-        MyAPIGateway.Entities.OnEntityAdd -= OnEntityAdd;
     }
+
 }
