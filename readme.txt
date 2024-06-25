@@ -1,0 +1,1 @@
+this is a version of the cores addon from ~october 2023 where I tried to make"CoreKits". I successfully made an arbitrary frigate/destroyer core and destroyer/frigate cargos that detect stuff around it and warn you. We now have a framework for that called Modular Assemblies. also included is a weird remote inventory experiment.
