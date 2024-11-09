@@ -152,7 +152,7 @@ namespace Digi.GravityCollector {
             }
             catch (Exception e)
             {
-                Log.Error(e);
+                //Log.Error(e);
             }
         }
 
@@ -170,7 +170,7 @@ namespace Digi.GravityCollector {
             }
             catch (Exception e)
             {
-                Log.Error(e);
+                //Log.Error(e);
             }
         }
 
@@ -193,7 +193,7 @@ namespace Digi.GravityCollector {
             }
             catch (Exception e)
             {
-                Log.Error(e);
+                //Log.Error(e);
             }
         }
 
@@ -278,7 +278,7 @@ namespace Digi.GravityCollector {
             }
             catch (Exception e)
             {
-                Log.Error(e);
+                //Log.Error(e);
             }
         }
 
@@ -400,7 +400,7 @@ namespace Digi.GravityCollector {
             }
             catch (Exception e)
             {
-                Log.Error($"Error loading settings!\n{e}");
+                //Log.Error($"Error loading settings!\n{e}");
             }
 
             return false;
@@ -498,7 +498,7 @@ namespace Digi.GravityCollector {
             }
             catch (Exception e)
             {
-                Log.Error(e);
+                //Log.Error(e);
             }
 
             return base.IsSerialized();
@@ -877,7 +877,7 @@ namespace Digi.GravityCollector {
         {
             if (entity?.Physics == null)
             {
-                Log.Info($"Failed to apply forces to entity {entity?.EntityId}: Physics null");
+                //Log.Info($"Failed to apply forces to entity {entity?.EntityId}: Physics null");
                 return;
             }
 
@@ -907,7 +907,7 @@ namespace Digi.GravityCollector {
             }
             catch (Exception e)
             {
-                Log.Error($"Failed to apply force to entity {entity.EntityId}: {e.Message}");
+                //Log.Error($"Failed to apply force to entity {entity.EntityId}: {e.Message}");
             }
         }
     }
