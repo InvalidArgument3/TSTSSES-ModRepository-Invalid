@@ -49,33 +49,35 @@ namespace SuitOrganicConductor
         {
             try
             {
-                if (_conductorBlock.IsWorking)
+                if (_conductorBlock?.IsWorking != true)
                 {
-                    if (_currentTarget == null || !IsValidTarget(_currentTarget))
+                    if (_conductorBlock != null)
                     {
-                        _currentTarget = FindNearestTarget();
+                        _conductorBlock.HudText = "Organic Conductor Offline";
+                    }
+                    return;
+                }
+
+                if (_currentTarget == null || !IsValidTarget(_currentTarget))
+                {
+                    _currentTarget = FindNearestTarget();
+                    _chargeUpCounter = 0;
+                }
+
+                if (_currentTarget != null)
+                {
+                    _chargeUpCounter++;
+                    UpdateHudText(_currentTarget);
+
+                    if (_chargeUpCounter >= ChargeUpTime)
+                    {
+                        ApplyDamageAndEffects(_currentTarget);
                         _chargeUpCounter = 0;
-                    }
-
-                    if (_currentTarget != null)
-                    {
-                        _chargeUpCounter++;
-                        UpdateHudText(_currentTarget);
-
-                        if (_chargeUpCounter >= ChargeUpTime)
-                        {
-                            ApplyDamageAndEffects(_currentTarget);
-                            _chargeUpCounter = 0;
-                        }
-                    }
-                    else
-                    {
-                        _conductorBlock.HudText = "Searching for target...";
                     }
                 }
                 else
                 {
-                    _conductorBlock.HudText = "Organic Conductor Offline";
+                    _conductorBlock.HudText = "Searching for target...";
                 }
             }
             catch (System.Exception e)
@@ -86,20 +88,21 @@ namespace SuitOrganicConductor
 
         private void UpdateHudText(IMyCharacter target)
         {
-            var controllingPlayer = target.ControllerInfo?.ControllingIdentityId;
-            if (controllingPlayer.HasValue)
-            {
-                var playerName = MyVisualScriptLogicProvider.GetPlayersName(controllingPlayer.Value);
-                var chargePercentage = (_chargeUpCounter / (float)ChargeUpTime) * 100;
+            if (target == null || _conductorBlock == null) return;
 
-                if (_chargeUpCounter >= ChargeUpTime)
-                {
-                    _conductorBlock.HudText = $"Firing at {playerName}!";
-                }
-                else
-                {
-                    _conductorBlock.HudText = $"Charging to attack {playerName} ({chargePercentage:F0}%)";
-                }
+            var controllingPlayer = target.ControllerInfo?.ControllingIdentityId;
+            if (!controllingPlayer.HasValue) return;
+
+            var playerName = MyVisualScriptLogicProvider.GetPlayersName(controllingPlayer.Value);
+            var chargePercentage = (_chargeUpCounter / (float)ChargeUpTime) * 100;
+
+            if (_chargeUpCounter >= ChargeUpTime)
+            {
+                _conductorBlock.HudText = $"Firing at {playerName}!";
+            }
+            else
+            {
+                _conductorBlock.HudText = $"Charging to attack {playerName} ({chargePercentage:F0}%)";
             }
         }
 
@@ -141,40 +144,40 @@ namespace SuitOrganicConductor
             double distanceSquared = Vector3D.DistanceSquared(character.GetPosition(), _conductorBlock.GetPosition());
             return distanceSquared <= _conductorBlock.Radius * _conductorBlock.Radius;
         }
-              
+
         private void ApplyDamageAndEffects(IMyCharacter character)
         {
+            if (character == null || _conductorBlock == null) return;
+
             var controllingPlayer = character.ControllerInfo?.ControllingIdentityId;
-            if (controllingPlayer.HasValue)
+            if (!controllingPlayer.HasValue) return;
+
+            var playerid = controllingPlayer.Value;
+            var health = MyVisualScriptLogicProvider.GetPlayersHealth(playerid);
+            health -= DamageAmount;
+
+            if (health <= 0)
             {
-                var playerid = controllingPlayer.Value;
-                var health = MyVisualScriptLogicProvider.GetPlayersHealth(playerid);
-                health -= DamageAmount;
-
-                if (health <= 0)
-                {
-                    MyVisualScriptLogicProvider.SetPlayersHealth(playerid, 0);
-                }
-                else
-                {
-                    MyVisualScriptLogicProvider.SetPlayersHealth(playerid, health);
-                }
-
-                Vector3D impulseDirection = Vector3D.Normalize(character.GetPosition() - _conductorBlock.GetPosition());
-                character.Physics.AddForce(MyPhysicsForceType.APPLY_WORLD_IMPULSE_AND_WORLD_ANGULAR_IMPULSE, impulseDirection * ImpulseStrength, null, null);
-
-                Vector3D hitPosition = character.GetPosition();
-                MyVisualScriptLogicProvider.CreateParticleEffectAtPosition("Explosion_Firework_Blue", hitPosition);
-                MyVisualScriptLogicProvider.PlaySingleSoundAtPosition("getzappedidiot", hitPosition);
-
-
-                controllingPlayer = character.ControllerInfo?.ControllingIdentityId;
-                if (controllingPlayer.HasValue)
-                {
-                    var playerName = MyVisualScriptLogicProvider.GetPlayersName(controllingPlayer.Value);
-                    _conductorBlock.HudText = $"Fired at {playerName}!";
-                }
+                MyVisualScriptLogicProvider.SetPlayersHealth(playerid, 0);
             }
+            else
+            {
+                MyVisualScriptLogicProvider.SetPlayersHealth(playerid, health);
+            }
+
+            if (character.Physics != null)
+            {
+                Vector3D impulseDirection = Vector3D.Normalize(character.GetPosition() - _conductorBlock.GetPosition());
+                character.Physics.AddForce(MyPhysicsForceType.APPLY_WORLD_IMPULSE_AND_WORLD_ANGULAR_IMPULSE,
+                    impulseDirection * ImpulseStrength, null, null);
+            }
+
+            Vector3D hitPosition = character.GetPosition();
+            MyVisualScriptLogicProvider.CreateParticleEffectAtPosition("Explosion_Firework_Blue", hitPosition);
+            MyVisualScriptLogicProvider.PlaySingleSoundAtPosition("getzappedidiot", hitPosition);
+
+            var playerName = MyVisualScriptLogicProvider.GetPlayersName(playerid);
+            _conductorBlock.HudText = $"Fired at {playerName}!";
         }
 
         private bool IsEnemy(long playerId)
@@ -199,14 +202,13 @@ namespace SuitOrganicConductor
 
         private void DrawDebugLineToTarget()
         {
-            if (_conductorBlock != null && _conductorBlock.IsWorking && _currentTarget != null)
-            {
-                Vector3D sourcePosition = _conductorBlock.GetPosition();
-                Vector3D targetPosition = _currentTarget.GetPosition();
-                float chargeProgress = (float)_chargeUpCounter / ChargeUpTime;
-                Vector4 color = Vector4.Lerp(Color.Green.ToVector4(), Color.Red.ToVector4(), chargeProgress);
-                MySimpleObjectDraw.DrawLine(sourcePosition, targetPosition, MaterialSquare, ref color, 0.1f);
-            }
+            if (_conductorBlock?.IsWorking != true || _currentTarget == null) return;
+
+            Vector3D sourcePosition = _conductorBlock.GetPosition();
+            Vector3D targetPosition = _currentTarget.GetPosition();
+            float chargeProgress = (float)_chargeUpCounter / ChargeUpTime;
+            Vector4 color = Vector4.Lerp(Color.Green.ToVector4(), Color.Red.ToVector4(), chargeProgress);
+            MySimpleObjectDraw.DrawLine(sourcePosition, targetPosition, MaterialSquare, ref color, 0.1f);
         }
     }
 }
