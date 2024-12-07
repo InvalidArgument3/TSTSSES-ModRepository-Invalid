@@ -474,11 +474,6 @@ namespace Invalid.DeltaVQuestLog
             {
                 DisplayQuestLog(factionObjectives[factionId], customTitle, playerId);
             }
-
-            if (duration > 0)
-            {
-                questLogHideTimes[playerId] = DateTime.UtcNow.AddSeconds(duration);
-            }
         }
 
         private void DisplayQuestLog(List<string> objectives, string title, long playerId)
