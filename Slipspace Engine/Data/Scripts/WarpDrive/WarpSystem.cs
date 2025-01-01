@@ -76,6 +76,9 @@ namespace WarpDriveMod {
         public string ProximytyAlert = "Can't Start SSD, Proximity Alert!";
 
         public const float EARTH_GRAVITY = 9.806652f;
+        private int teleportTick = 0;
+        private const int TELEPORT_DELAY = 10; // Adjust this value to change the update frequency
+
 
         public WarpSystem(WarpDrive block, WarpSystem oldSystem) {
             if (block == null)
@@ -211,21 +214,30 @@ namespace WarpDriveMod {
                 }
             }
 
-            if (TeleportNow && !SafeTriggerON) {
-                TeleportNow = false;
+            if (TeleportNow && !SafeTriggerON)
+            {
+                teleportTick++;
+                if (teleportTick >= TELEPORT_DELAY)
+                {
+                    teleportTick = 0;
+                    TeleportNow = false;
 
-                if (currentSpeedPt > 1f && gridMatrix != null) {
-                    gridMatrix.Translation += gridMatrix.Forward * currentSpeedPt;
+                    if (currentSpeedPt > 1f && gridMatrix != null)
+                    {
+                        // Multiply the movement by TELEPORT_DELAY to maintain the same effective speed
+                        gridMatrix.Translation += gridMatrix.Forward * currentSpeedPt * TELEPORT_DELAY;
 
-                    if (MyAPIGateway.Utilities.IsDedicated || MyAPIGateway.Multiplayer.IsServer)
-                        MainGrid.Teleport(gridMatrix);
+                        if (MyAPIGateway.Utilities.IsDedicated || MyAPIGateway.Multiplayer.IsServer)
+                            MainGrid.Teleport(gridMatrix);
 
-                    if (!MyAPIGateway.Utilities.IsDedicated) {
-                        DrawAllLinesCenter1();
+                        if (!MyAPIGateway.Utilities.IsDedicated)
+                        {
+                            DrawAllLinesCenter1();
 
-                        if (currentSpeedPt > 316.6666) {
-                            //StartBlinkParticleEffect();
-                            DrawAllLinesCenter4();
+                            if (currentSpeedPt > 316.6666)
+                            {
+                                DrawAllLinesCenter4();
+                            }
                         }
                     }
                 }

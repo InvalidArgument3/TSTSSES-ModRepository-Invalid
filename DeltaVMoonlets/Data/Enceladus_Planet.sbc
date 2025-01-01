@@ -1,0 +1,261 @@
+<?xml version="1.0"?>
+<Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Definition xsi:type="PlanetGeneratorDefinition">
+		<Id>
+		  <TypeId>PlanetGeneratorDefinition</TypeId>
+		  <SubtypeId>Enceladus</SubtypeId>
+		</Id>
+		<PlanetMaps Material="true" Ores="true" Biome="true" Occlusion="false"/>
+
+		<Difficulty>Hard</Difficulty>
+		<SurfaceGravity>0.328</SurfaceGravity>
+		<DefaultSurfaceMaterial Material="EnceladusSnow02" MaxDepth="5"/>  <!--should never appear-->
+		<DefaultSubSurfaceMaterial Material="Stone_02"/>	<!--stone core-->
+
+		<MaterialsMaxDepth Min="4000" Max="4000"/>	<!--doesn't really matter-->
+		<MaterialsMinDepth Min="20" Max="20"/>	<!--doesn't really matter-->
+		<MinimumSurfaceLayerDepth>3</MinimumSurfaceLayerDepth>	<!--doesn't really matter-->
+
+		<HillParams Min = "-0.03" Max ="0.03"/>	<!--lowest point at 0.997 r, highest at 1-->
+
+		<SurfaceDetail>		<!--everywhere, but far stronger in cracks-->
+		  <Texture>Data/PlanetDataFiles/Extra/material_detail_4</Texture>
+		  <Size>430</Size>
+		  <Scale>4</Scale>
+		  <Slope Min="0" Max="120" />	<!--120, so surface detail appears all the way to 90 deg despite transition-->
+		  <Transition>28</Transition>
+		</SurfaceDetail>
+		
+	    <DefaultSurfaceTemperature>ExtremeFreeze</DefaultSurfaceTemperature>
+		<HasAtmosphere>true</HasAtmosphere>
+		<Atmosphere>
+		  <Breathable>true</Breathable>
+		  <OxygenDensity>0.1</OxygenDensity>	<!--harvesting oxy with vents is possible but slow-->
+		  <Density>0.5</Density>	<!--Equation for thruster perf is kinda complex, but ~28%-->
+		  <LimitAltitude>1</LimitAltitude>
+		  <MaxWindSpeed>8</MaxWindSpeed>
+		</Atmosphere>
+		
+		<ComplexMaterials>	<!--flats1 and flats2 are white, cracks blue-->
+		  <MaterialGroup Name="Flats1" Value="50">	<!--500m, then stone-->
+			<Rule>
+			  <Layers>
+				<Layer Material="IceEuropa2" Depth="5"/>
+				<Layer Material="EnceladusIce03" Depth="500"/>
+			  </Layers>
+			  <Height Min="-0.1" Max="1.0"/>
+			  <Latitude Min="0" Max="90"/>
+			  <Slope Min="52" Max="90"/>
+			</Rule>
+			<Rule>
+			  <Layers>
+				<Layer Material="EnceladusIce02" Depth="5"/>
+				<Layer Material="EnceladusIce03" Depth="500"/>
+			  </Layers>
+			  <Height Min="-0.1" Max="1.0"/>
+			  <Latitude Min="0" Max="90"/>
+			  <Slope Min="20" Max="52"/>
+			</Rule>
+			<Rule>
+			  <Layers>
+				<Layer Material="EnceladusSnow02" Depth="3"/>
+				<Layer Material="EnceladusIce03" Depth="500"/>
+			  </Layers>
+			  <Height Min="-0.1" Max="1.0"/>
+			  <Latitude Min="0" Max="90"/>
+			  <Slope Min="0" Max="20"/>
+			</Rule>
+		  </MaterialGroup>
+		  
+		  <MaterialGroup Name="Flats2" Value="100">	<!--500m, then stone-->
+			<Rule>
+			  <Layers>
+				<Layer Material="IceEuropa2" Depth="5"/>
+				<Layer Material="EnceladusIce03" Depth="500"/>
+			  </Layers>
+			  <Height Min="-0.1" Max="1.0"/>
+			  <Latitude Min="0" Max="90"/>
+			  <Slope Min="52" Max="90"/>
+			</Rule>
+			<Rule>
+			  <Layers>
+				<Layer Material="EnceladusIce02" Depth="5"/>
+				<Layer Material="EnceladusIce03" Depth="500"/>
+			  </Layers>
+			  <Height Min="-0.1" Max="1.0"/>
+			  <Latitude Min="0" Max="90"/>
+			  <Slope Min="20" Max="52"/>
+			</Rule>
+			<Rule>
+			  <Layers>
+				<Layer Material="EnceladusSnow01" Depth="3"/>
+				<Layer Material="EnceladusIce03" Depth="500"/>
+			  </Layers>
+			  <Height Min="-0.1" Max="1.0"/>
+			  <Latitude Min="0" Max="90"/>
+			  <Slope Min="0" Max="20"/>
+			</Rule>
+		  </MaterialGroup>
+		  
+		  <MaterialGroup Name="Cracks" Value="150"> <!--250m lower-> 250m, then stone-->
+			<Rule>
+			  <Layers>
+				<Layer Material="EnceladusIce02" Depth="5"/>
+				<Layer Material="EnceladusIce03" Depth="450"/>
+			  </Layers>
+			  <Height Min="0.34" Max="1.0"/>
+			  <Latitude Min="0" Max="90"/>
+			  <Slope Min="0" Max="45"/>
+			</Rule>
+			<Rule>
+			  <Layers>
+				<Layer Material="EnceladusIce01" Depth="5"/>
+				<Layer Material="EnceladusIce03" Depth="350"/>
+			  </Layers>
+			  <Height Min="-0.1" Max="1.0"/>
+			  <Latitude Min="0" Max="90"/>
+			  <Slope Min="5" Max="90"/>
+			</Rule>
+			<Rule>
+			  <Layers>
+				<Layer Material="IceEuropa2" Depth="5"/>
+				<Layer Material="EnceladusIce03" Depth="250"/>
+			  </Layers>
+			  <Height Min="-0.1" Max="0.05"/>
+			  <Latitude Min="0" Max="90"/>
+			  <Slope Min="0" Max="5"/>
+			</Rule>
+		  </MaterialGroup>
+		</ComplexMaterials>
+
+		<OreMappings>	<!--5 Fe, 3 Ni, 3 Si, 3 Co, 1 Mg, 3 Ag, 2 Au-->
+		  <Ore Value="10" Type="Iron_02" Start="7" Depth="5" TargetColor="#616c83" ColorInfluence="15"/>
+		  <Ore Value="20" Type="Iron_02" Start="9" Depth="7" TargetColor="#616c83" ColorInfluence="15"/>
+		  <Ore Value="30" Type="Iron_02" Start="12" Depth="8" TargetColor="#616c83" ColorInfluence="15"/>
+		  <Ore Value="40" Type="Iron_02" Start="16" Depth="7" TargetColor="#616c83" ColorInfluence="15"/>
+		  <Ore Value="50" Type="Iron_02" Start="22" Depth="5" TargetColor="#616c83" ColorInfluence="15"/>
+		  <Ore Value="60" Type="Nickel_01" Start="6" Depth="6" TargetColor="#616c83" ColorInfluence="15"/>
+		  <Ore Value="70" Type="Nickel_01" Start="12" Depth="5" TargetColor="#616c83" ColorInfluence="15"/>
+		  <Ore Value="80" Type="Nickel_01" Start="23" Depth="7" TargetColor="#616c83" ColorInfluence="15"/>
+		  <Ore Value="90" Type="Silicon_01" Start="9" Depth="9" TargetColor="#616c83" ColorInfluence="15"/>
+		  <Ore Value="100" Type="Silicon_01" Start="16" Depth="5" TargetColor="#616c83" ColorInfluence="15"/>
+		  <Ore Value="110" Type="Silicon_01" Start="26" Depth="7" TargetColor="#616c83" ColorInfluence="15"/>
+		  <Ore Value="120" Type="Cobalt_01" Start="12" Depth="7" TargetColor="#616c83" ColorInfluence="15"/>
+		  <Ore Value="130" Type="Cobalt_01" Start="28" Depth="5" TargetColor="#616c83" ColorInfluence="15"/>
+		  <Ore Value="140" Type="Magnesium_01" Start="17" Depth="6" TargetColor="#616c83" ColorInfluence="15"/>
+		  <Ore Value="150" Type="Silver_01" Start="13" Depth="7" TargetColor="#616c83" ColorInfluence="15"/>
+		  <Ore Value="160" Type="Silver_01" Start="24" Depth="5" TargetColor="#616c83" ColorInfluence="15"/>
+		  <Ore Value="170" Type="Silver_01" Start="32" Depth="6" TargetColor="#616c83" ColorInfluence="15"/>
+		  <Ore Value="180" Type="Gold_01" Start="21" Depth="9" TargetColor="#616c83" ColorInfluence="15"/>
+		  <Ore Value="190" Type="Gold_01" Start="34" Depth="8" TargetColor="#616c83" ColorInfluence="15"/>
+		  <Ore Value="190" Type="Cobalt_01" Start="34" Depth="10" TargetColor="#616c83" ColorInfluence="15"/>
+		</OreMappings>
+		
+		<SoundRules>
+		  <!-- Day -->
+		  <SoundRule>
+			<Height Min="0" Max="0.75"/>
+			<Latitude Min="0" Max="90"/>
+			<SunAngleFromZenith Min="0" Max="90"/>
+			<EnvironmentSound>AmbAlienPole</EnvironmentSound>
+		  </SoundRule>
+
+		  <!-- Night -->
+		  <SoundRule>
+			<Height Min="0" Max="0.75"/>
+			<Latitude Min="0" Max="90"/>
+			<SunAngleFromZenith Min="90" Max="180"/>
+			<EnvironmentSound>AmbEuropaMoonNight</EnvironmentSound>
+		  </SoundRule>
+		</SoundRules>
+
+		<MusicCategories>
+		  <MusicCategory Category="Alien" Frequency="0.2" />
+		  <MusicCategory Category="Mystery" Frequency="0.1" />
+		  <MusicCategory Category="Danger" Frequency="0.05" />
+		  <MusicCategory Category="Planet" Frequency="0.3" />
+		  <MusicCategory Category="Calm" Frequency="0.2" />
+		  <MusicCategory Category="Space" Frequency="0.2" />
+		</MusicCategories>
+		
+		<AtmosphereSettings>
+		  <RayleighScattering>
+			<X>25</X>
+			<Y>32</Y>
+			<Z>71</Z>
+		  </RayleighScattering>
+		  <MieColorScattering>
+			<X>100</X>
+			<Y>100</Y>
+			<Z>100</Z>
+		  </MieColorScattering>
+		  <RayleighHeight>4</RayleighHeight>
+		  <RayleighHeightSpace>4</RayleighHeightSpace>
+		  <RayleighTransitionModifier>0.7</RayleighTransitionModifier>
+		  <MieHeight>12</MieHeight>
+		  <MieG>0.995</MieG>
+		  <Intensity>2</Intensity>
+		  <FogIntensity>1</FogIntensity>
+		  <SeaLevelModifier>0.98</SeaLevelModifier>
+		  <AtmosphereTopModifier>1.1</AtmosphereTopModifier>
+		  <SunColor>
+			<X>0.9</X>
+			<Y>0.95</Y>
+			<Z>1</Z>
+		  </SunColor>
+		  <SunSpecularColor>
+			<X>0.9</X>
+			<Y>0.95</Y>
+			<Z>1</Z>
+		  </SunSpecularColor>
+		</AtmosphereSettings>
+
+		<WeatherFrequencyMin>10</WeatherFrequencyMin>	<!--updates like all the time to make sure theres always weather-->
+		<WeatherFrequencyMax>20</WeatherFrequencyMax>
+		<GlobalWeather>false</GlobalWeather>	<!--broken???-->
+		<WeatherGenerators>
+			<WeatherGenerator>
+		        <Voxel>Snow</Voxel>
+				<Voxel>Ice</Voxel>
+				<Weathers>
+					<Weather>
+						<Name>SnowEnceladus</Name>
+						<Weight>1</Weight>
+						<MinLength>3000</MinLength>
+						<MaxLength>3000</MaxLength>
+					    <SpawnOffset>-2000</SpawnOffset>
+					</Weather>
+				</Weathers>
+			</WeatherGenerator>
+		</WeatherGenerators>
+
+		
+		<DistortionTable>	<!--useless???-->
+		  <Distortion Type="Perlin" Value ="92" Frequency="10" Height="4" LayerCount="6"/>
+		</DistortionTable>
+		<MesherPostprocessing xsi:type="MyObjectBuilder_VoxelMesherComponentDefinition">	<!--useless???-->
+		  <PostprocessingSteps>
+			<Step xsi:type="MyObjectBuilder_VoxelPostprocessingDecimate" ForPhysics="true">
+			  <LodSettings>
+				<Settings FromLod="0">
+				  <FeatureAngle>15</FeatureAngle>
+				  <EdgeThreshold>.04</EdgeThreshold>
+				  <PlaneThreshold>.02</PlaneThreshold>
+				</Settings>
+				<Settings FromLod="1">
+				  <FeatureAngle>15</FeatureAngle>
+				  <EdgeThreshold>.04</EdgeThreshold>
+				  <PlaneThreshold>.04</PlaneThreshold>
+				</Settings>
+				<Settings FromLod="2">
+				  <FeatureAngle>15</FeatureAngle>
+				  <EdgeThreshold>.06</EdgeThreshold>
+				  <PlaneThreshold>.06</PlaneThreshold>
+				</Settings>
+			  </LodSettings>
+			</Step>
+		  </PostprocessingSteps>
+		</MesherPostprocessing>
+	  
+  </Definition>
+</Definitions>

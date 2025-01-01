@@ -176,9 +176,8 @@ namespace TeleportMechanisms {
             }
         }
 
-        public static void TeleportEntity(IMyEntity entity, IMyCollector sourceGateway, IMyCollector destGateway) {
-            MyLogger.Log($"TPCore: TeleportEntity: Teleporting entity {entity.EntityId}");
-
+        public static void TeleportEntity(IMyEntity entity, IMyCollector sourceGateway, IMyCollector destGateway)
+        {
             var relativePosition = entity.GetPosition() - sourceGateway.GetPosition();
             var localPosition = Vector3D.TransformNormal(relativePosition, MatrixD.Invert(sourceGateway.WorldMatrix));
             var newPosition = Vector3D.TransformNormal(localPosition, destGateway.WorldMatrix) + destGateway.GetPosition();
@@ -188,13 +187,16 @@ namespace TeleportMechanisms {
             var newOrientation = relativeOrientation * destGateway.WorldMatrix;
 
             var character = entity as IMyCharacter;
-            if (character != null) {
+            if (character != null)
+            {
                 character.Teleport(newOrientation);
                 character.SetWorldMatrix(newOrientation);
             }
-            else {
+            else
+            {
                 var grid = entity as IMyCubeGrid;
-                if (grid != null) {
+                if (grid != null)
+                {
                     TeleportGrid(grid, newOrientation, sourceGateway.WorldMatrix, destGateway.WorldMatrix);
                 }
             }
@@ -202,77 +204,99 @@ namespace TeleportMechanisms {
             MyLogger.Log($"TPCore: TeleportEntity: Entity {entity.EntityId} teleported to {newPosition}");
         }
 
-        private static void TeleportGrid(IMyCubeGrid mainGrid, MatrixD newOrientation, MatrixD sourceGatewayMatrix, MatrixD destinationGatewayMatrix) {
-            var allGrids = new List<IMyCubeGrid>();
-            MyAPIGateway.GridGroups.GetGroup(mainGrid, GridLinkTypeEnum.Physical, allGrids);
+        private static void TeleportGrid(IMyCubeGrid mainGrid, MatrixD newOrientation, MatrixD sourceGatewayMatrix, MatrixD destinationGatewayMatrix)
+        {
+            MyLogger.Log($"TPGate: TeleportGrid: Starting teleport for main grid {mainGrid.DisplayName} (EntityId: {mainGrid.EntityId})");
 
-            // Create a new list for subgrids, excluding the main grid
-            var subgrids = allGrids.Where(grid => grid != mainGrid).ToList();
+            // Get all physically connected grids (including mechanical connections like landing gear)
+            var allConnectedGrids = new HashSet<IMyCubeGrid>();
+            var physicalGroup = MyAPIGateway.GridGroups.GetGridGroup(GridLinkTypeEnum.Physical, mainGrid);
+            var mechanicalGroup = MyAPIGateway.GridGroups.GetGridGroup(GridLinkTypeEnum.Mechanical, mainGrid);
 
-            // Dictionary to store the local matrices of each subgrid relative to the main grid
-            Dictionary<IMyCubeGrid, MatrixD> relativeLocalMatrices = new Dictionary<IMyCubeGrid, MatrixD>();
-
-            // Calculate and store the relative local matrix for each subgrid
-            foreach (var subgrid in subgrids) {
-                MatrixD relativeMatrix = subgrid.WorldMatrix * MatrixD.Invert(mainGrid.WorldMatrix);
-                relativeLocalMatrices[subgrid] = relativeMatrix;
-                MyLogger.Log($"TPCore: TeleportGrid: Calculated relative matrix for subgrid {subgrid.DisplayName} (EntityId: {subgrid.EntityId}), Relative Matrix: {relativeMatrix}");
+            if (physicalGroup != null)
+            {
+                MyAPIGateway.GridGroups.GetGroup(mainGrid, GridLinkTypeEnum.Physical, allConnectedGrids);
+                MyLogger.Log($"TPGate: TeleportGrid: Found {allConnectedGrids.Count} physically connected grids");
             }
 
-            // Teleport the main grid using both Teleport and WorldMatrix setting
-            MyLogger.Log($"TPCore: TeleportGrid: Teleporting main grid {mainGrid.DisplayName} (EntityId: {mainGrid.EntityId}), New Orientation: {newOrientation}");
-            mainGrid.Teleport(newOrientation);
-            mainGrid.WorldMatrix = newOrientation; //double prevents most wiggle
-
-            // Update physics for the main grid
-            var mainPhysics = mainGrid.Physics;
-            if (mainPhysics != null) {
-                mainPhysics.LinearVelocity = Vector3D.Zero;
-                mainPhysics.AngularVelocity = Vector3D.Zero;
-
-                float naturalGravityInterference;
-                var naturalGravity = MyAPIGateway.Physics.CalculateNaturalGravityAt(mainGrid.PositionComp.WorldAABB.Center, out naturalGravityInterference);
-                mainPhysics.Gravity = naturalGravity;
-                MyLogger.Log($"TPCore: TeleportGrid: Updated physics for main grid {mainGrid.DisplayName} (EntityId: {mainGrid.EntityId}), Linear Velocity: {mainPhysics.LinearVelocity}, Angular Velocity: {mainPhysics.AngularVelocity}, Gravity: {mainPhysics.Gravity}");
+            if (mechanicalGroup != null)
+            {
+                MyAPIGateway.GridGroups.GetGroup(mainGrid, GridLinkTypeEnum.Mechanical, allConnectedGrids);
+                MyLogger.Log($"TPGate: TeleportGrid: Added mechanical connections, total grids: {allConnectedGrids.Count}");
             }
 
-            // HashSet to track processed subgrids
-            HashSet<long> processedSubgrids = new HashSet<long>();
-
-            // Transform and update all subgrids
-            foreach (var subgrid in subgrids) {
-                if (processedSubgrids.Contains(subgrid.EntityId)) {
-                    MyLogger.Log($"TPCore: TeleportGrid: Skipping already processed subgrid {subgrid.DisplayName} (EntityId: {subgrid.EntityId})");
-                    continue;
-                }
-
-                try {
-                    MatrixD newGridWorldMatrix = relativeLocalMatrices[subgrid] * mainGrid.WorldMatrix;
-                    MyLogger.Log($"TPCore: TeleportGrid: Calculating new WorldMatrix for subgrid {subgrid.DisplayName} (EntityId: {subgrid.EntityId}), New World Matrix: {newGridWorldMatrix}");
-                    subgrid.WorldMatrix = newGridWorldMatrix;
-                    MyLogger.Log($"TPCore: TeleportGrid: Updated WorldMatrix for subgrid {subgrid.DisplayName} (EntityId: {subgrid.EntityId}), New World Matrix: {newGridWorldMatrix}");
-
-                    var physics = subgrid.Physics;
-                    if (physics != null) {
-                        physics.LinearVelocity = Vector3D.Zero;
-                        physics.AngularVelocity = Vector3D.Zero;
-                        physics.Gravity = mainPhysics?.Gravity ?? Vector3.Zero;
-                        MyLogger.Log($"TPCore: TeleportGrid: Updated physics for subgrid {subgrid.DisplayName} (EntityId: {subgrid.EntityId}), Linear Velocity: {physics.LinearVelocity}, Angular Velocity: {physics.AngularVelocity}, Gravity: {physics.Gravity}");
-                    }
-
-                    // Mark this subgrid as processed
-                    processedSubgrids.Add(subgrid.EntityId);
-                }
-                catch (Exception ex) {
-                    MyLogger.Log($"TPCore: TeleportGrid: Exception occurred while handling subgrid {subgrid.DisplayName} (EntityId: {subgrid.EntityId}): {ex.Message}");
+            // Calculate relative positions before any teleporting
+            var relativeMatrices = new Dictionary<IMyCubeGrid, MatrixD>();
+            foreach (var grid in allConnectedGrids)
+            {
+                if (grid != mainGrid)
+                {
+                    MatrixD relativeMatrix = grid.WorldMatrix * MatrixD.Invert(mainGrid.WorldMatrix);
+                    relativeMatrices[grid] = relativeMatrix;
+                    MyLogger.Log($"TPGate: TeleportGrid: Calculated relative matrix for grid {grid.DisplayName} (EntityId: {grid.EntityId})");
                 }
             }
 
-            // These last two get rid of connector based wiggle
+            // First teleport the main grid
+            MyLogger.Log($"TPGate: TeleportGrid: Teleporting main grid to new position");
             mainGrid.Teleport(newOrientation);
             mainGrid.WorldMatrix = newOrientation;
 
-            MyLogger.Log($"TPCore: TeleportGrid: Teleportation complete for main grid {mainGrid.DisplayName} (EntityId: {mainGrid.EntityId}) and its {subgrids.Count} subgrids");
+            // Update main grid physics
+            var mainPhysics = mainGrid.Physics;
+            if (mainPhysics != null)
+            {
+                mainPhysics.LinearVelocity = Vector3D.Zero;
+                mainPhysics.AngularVelocity = Vector3D.Zero;
+                float naturalGravityInterference;
+                var naturalGravity = MyAPIGateway.Physics.CalculateNaturalGravityAt(mainGrid.PositionComp.WorldAABB.Center, out naturalGravityInterference);
+                mainPhysics.Gravity = naturalGravity;
+                MyLogger.Log($"TPGate: TeleportGrid: Updated main grid physics - Gravity: {naturalGravity}");
+            }
+
+            // Now teleport all connected grids
+            foreach (var grid in allConnectedGrids)
+            {
+                if (grid == mainGrid)
+                    continue;
+
+                try
+                {
+                    MatrixD newGridMatrix = relativeMatrices[grid] * mainGrid.WorldMatrix;
+                    grid.WorldMatrix = newGridMatrix;
+
+                    var physics = grid.Physics;
+                    if (physics != null)
+                    {
+                        physics.LinearVelocity = Vector3D.Zero;
+                        physics.AngularVelocity = Vector3D.Zero;
+                        physics.Gravity = mainPhysics?.Gravity ?? Vector3.Zero;
+                    }
+
+                    MyLogger.Log($"TPGate: TeleportGrid: Teleported connected grid {grid.DisplayName} (EntityId: {grid.EntityId})");
+                }
+                catch (Exception ex)
+                {
+                    MyLogger.Log($"TPGate: TeleportGrid: Error teleporting grid {grid.DisplayName}: {ex.Message}");
+                }
+            }
+
+            // Verify connections are maintained
+            var finalPhysicalGroup = MyAPIGateway.GridGroups.GetGridGroup(GridLinkTypeEnum.Physical, mainGrid);
+            var finalMechanicalGroup = MyAPIGateway.GridGroups.GetGridGroup(GridLinkTypeEnum.Mechanical, mainGrid);
+
+            if (finalPhysicalGroup != null && finalMechanicalGroup != null)
+            {
+                var finalConnectedGrids = new HashSet<IMyCubeGrid>();
+                MyAPIGateway.GridGroups.GetGroup(mainGrid, GridLinkTypeEnum.Physical, finalConnectedGrids);
+                MyAPIGateway.GridGroups.GetGroup(mainGrid, GridLinkTypeEnum.Mechanical, finalConnectedGrids);
+
+                MyLogger.Log($"TPGate: TeleportGrid: Final connected grids count: {finalConnectedGrids.Count}");
+                if (finalConnectedGrids.Count != allConnectedGrids.Count)
+                {
+                    MyLogger.Log($"TPGate: TeleportGrid: Warning - Grid connections may have been affected during teleport");
+                }
+            }
         }
 
         public static void ClientApplyTeleportResponse(TeleportResponseMessage message) {

@@ -461,6 +461,19 @@ namespace SKONanobotBuildAndRepairSystem
                         CleanupFriendlyDamage();
                     }
 
+                    // Check if other BaR is powered in grid group
+                    if (_Welder.Enabled && IsOtherBaRPoweredInGridGroup())
+                    {
+                        _Welder.Enabled = false;
+                        NotifyPlayersInRange(
+                            "Only one Build And Repair System can be powered per grid group",
+                            _Welder.GetPosition(),
+                            1000,
+                            "Red"
+                        );
+                        return;
+                    }
+
                     ServerTryWeldingGrindingCollecting();
 
                     if (!fast)
@@ -509,6 +522,50 @@ namespace SKONanobotBuildAndRepairSystem
             catch (Exception ex)
             {
                 if (Mod.Log.ShouldLog(Logging.Level.Error)) Mod.Log.Write(Logging.Level.Error, "BuildAndRepairSystemBlock {0}: UpdateBeforeSimulation10/100 Exception:{1}", Logging.BlockName(_Welder, Logging.BlockNameOptions.None), ex);
+            }
+        }
+
+        private bool IsOtherBaRPoweredInGridGroup()
+        {
+            var grid = _Welder.CubeGrid;
+            var groupedGrids = new HashSet<IMyCubeGrid>();
+            MyAPIGateway.GridGroups.GetGroup(grid, GridLinkTypeEnum.Physical, groupedGrids);
+
+            foreach (var connectedGrid in groupedGrids)
+            {
+                var blocks = new List<IMySlimBlock>();
+                connectedGrid.GetBlocks(blocks);
+
+                foreach (var block in blocks)
+                {
+                    var bar = block.FatBlock as IMyShipWelder;
+                    if (bar != null && bar.BlockDefinition.SubtypeName.Contains("NanobotBuildAndRepairSystem"))
+                    {
+                        var otherSystem = bar.GameLogic.GetAs<NanobotBuildAndRepairSystemBlock>();
+                        if (otherSystem != null && otherSystem != this && otherSystem.Welder.IsWorking)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private static void NotifyPlayersInRange(string text, Vector3D position, double radius, string font = "White")
+        {
+            BoundingSphereD bound = new BoundingSphereD(position, radius);
+            List<IMyEntity> nearbyEntities = MyAPIGateway.Entities.GetEntitiesInSphere(ref bound);
+
+            foreach (var entity in nearbyEntities)
+            {
+                IMyCharacter character = entity as IMyCharacter;
+                if (character != null && character.IsPlayer)
+                {
+                    var notification = MyAPIGateway.Utilities.CreateNotification(text, 2000, font);
+                    notification.Show();
+                }
             }
         }
 

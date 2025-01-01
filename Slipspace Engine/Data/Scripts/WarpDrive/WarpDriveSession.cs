@@ -228,7 +228,7 @@ namespace WarpDriveMod
                 }));
         }
 
-        private void ReceiveWarpSpeed(ushort channel, byte[] data, ulong sender, bool fromServer)
+        private void ReceiveWarpSpeed(ushort channel, byte[] data, ulong sender, bool fromServer) //TODO: suspect this for constant warp load sent to clients
         {
             var message = MyAPIGateway.Utilities.SerializeFromBinary<SpeedMessage>(data);
             if (message == null)

@@ -2,9 +2,24 @@ using ProtoBuf;
 using Sandbox.ModAPI;
 using VRageMath;
 using VRage.Utils;
+using VRage.ModAPI;
+using System;
 
 namespace TeleportMechanisms
 {
+    [ProtoContract]
+    public class JumpInitiatedMessage
+    {
+        [ProtoMember(1)]
+        public long GatewayId { get; set; }
+        [ProtoMember(2)]
+        public double JumpDistance { get; set; }
+        [ProtoMember(3)]
+        public int CountdownTicks { get; set; }
+        [ProtoMember(4)]
+        public float PowerRequired { get; set; }
+    }
+
     [ProtoContract]
     public class TeleportRequestMessage
     {
@@ -124,6 +139,7 @@ namespace TeleportMechanisms
         public const ushort TeleportResponseId = 8002;
         public const ushort JumpRequestId = 8003;
         public const ushort SyncSettingsId = 8004;
+        public const ushort JumpInitiatedId = 8005;
 
 
         public static void Register()
@@ -133,6 +149,8 @@ namespace TeleportMechanisms
             MyAPIGateway.Multiplayer.RegisterMessageHandler(TeleportResponseId, HandleTeleportResponse);
             MyAPIGateway.Multiplayer.RegisterMessageHandler(JumpRequestId, HandleJumpRequest);
             MyAPIGateway.Multiplayer.RegisterMessageHandler(SyncSettingsId, HandleSyncSettings);
+            MyAPIGateway.Multiplayer.RegisterMessageHandler(JumpInitiatedId, HandleJumpInitiated);
+
         }
 
         public static void Unregister()
@@ -142,6 +160,8 @@ namespace TeleportMechanisms
             MyAPIGateway.Multiplayer.UnregisterMessageHandler(TeleportResponseId, HandleTeleportResponse);
             MyAPIGateway.Multiplayer.UnregisterMessageHandler(JumpRequestId, HandleJumpRequest);
             MyAPIGateway.Multiplayer.UnregisterMessageHandler(SyncSettingsId, HandleSyncSettings);
+            MyAPIGateway.Multiplayer.UnregisterMessageHandler(JumpInitiatedId, HandleJumpInitiated);
+
         }
 
         private static void HandleSyncSettings(byte[] data)
@@ -198,6 +218,51 @@ namespace TeleportMechanisms
 
             var message = MyAPIGateway.Utilities.SerializeFromBinary<JumpRequestMessage>(data);
             TeleportGateway.ProcessJumpRequest(message.GatewayId, message.Link);
+        }
+
+        private static void HandleJumpInitiated(byte[] data)
+        {
+            var message = MyAPIGateway.Utilities.SerializeFromBinary<JumpInitiatedMessage>(data);
+            var gateway = MyAPIGateway.Entities.GetEntityById(message.GatewayId) as IMyCollector;
+            if (gateway != null)
+            {
+                var gatewayLogic = gateway.GameLogic.GetAs<TeleportGateway>();
+                if (gatewayLogic != null)
+                {
+                    MyLogger.Log($"TPGate: HandleJumpInitiated: Received jump initiation. Distance: {message.JumpDistance / 1000:F1}km");
+
+                    // Set values for countdown
+                    gatewayLogic._jumpDistance = message.JumpDistance;
+                    gatewayLogic._teleportCountdown = message.CountdownTicks;
+                    gatewayLogic._isTeleporting = true;
+                    gatewayLogic._showSphereDuringCountdown = true;
+
+                    // Ensure power is deducted
+                    gatewayLogic.Settings.StoredPower = Math.Max(0, gatewayLogic.Settings.StoredPower - message.PowerRequired);
+                    gatewayLogic.Settings.Changed = true;
+
+                    float totalSeconds = message.CountdownTicks / 60f;
+
+                    // Send initial notification
+                    TeleportGateway.NotifyPlayersInRange(
+                        $"Initiating {message.JumpDistance / 1000:F1}km jump - {totalSeconds:F1} seconds",
+                        gateway.GetPosition(),
+                        100,
+                        "White"
+                    );
+
+                    // Send first countdown notification immediately
+                        TeleportGateway.NotifyPlayersInRange(
+                        $"Jump in {totalSeconds:F1}s... Distance: {message.JumpDistance / 1000:F1}km",
+                        gateway.GetPosition(),
+                        100,
+                        "White"
+                    );
+
+                    gatewayLogic.NeedsUpdate |= MyEntityUpdateEnum.EACH_FRAME;
+                    MyLogger.Log($"TPGate: HandleJumpInitiated: Started countdown. Time: {totalSeconds}s");
+                }
+            }
         }
     }
 }
