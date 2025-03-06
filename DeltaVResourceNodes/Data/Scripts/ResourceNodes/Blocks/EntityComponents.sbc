@@ -1,0 +1,14 @@
+<Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <EntityComponents>
+        <EntityComponent xsi:type="MyObjectBuilder_EntityComponentDefinition">
+            <Id>
+                <TypeId>EntityComponent</TypeId>
+                <SubtypeId>ResourceNodesStorage</SubtypeId>
+            </Id>
+            <Description>Resource Nodes Mod Storage</Description>
+            <ComponentType>Storage</ComponentType>
+            <SubTypeId>ResourceNodesStorage</SubTypeId>
+            <ComponentId>b0017db2-57a1-4915-b0c6-0d94cf8c73e5</ComponentId>
+        </EntityComponent>
+    </EntityComponents>
+</Definitions>

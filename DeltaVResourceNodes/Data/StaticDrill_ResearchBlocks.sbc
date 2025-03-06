@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <ResearchBlocks>
+
+    <ResearchBlock xsi:type="ResearchBlock">
+      <Id Type="Drill" Subtype="BasicStaticDrill"/>
+      <UnlockedByGroups>
+        <GroupSubtype>9</GroupSubtype>
+      </UnlockedByGroups>
+    </ResearchBlock>
+    <ResearchBlock xsi:type="ResearchBlock">
+      <Id Type="Drill" Subtype="StaticDrill"/>
+      <UnlockedByGroups>
+        <GroupSubtype>9</GroupSubtype>
+      </UnlockedByGroups>
+    </ResearchBlock>
+    <ResearchBlock xsi:type="ResearchBlock">
+      <Id Type="Drill" Subtype="AdvancedStaticDrill"/>
+      <UnlockedByGroups>
+        <GroupSubtype>9</GroupSubtype>
+      </UnlockedByGroups>
+    </ResearchBlock>
+    
+  </ResearchBlocks>
+
+</Definitions>

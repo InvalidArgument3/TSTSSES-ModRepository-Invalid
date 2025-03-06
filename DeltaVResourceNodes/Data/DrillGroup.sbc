@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<BlockVariantGroups>
+
+		<BlockVariantGroup>
+			<Id Type="MyObjectBuilder_BlockVariantGroup" Subtype="StaticDrills" />
+			<Icon>Textures\StaticDrill.dds</Icon>
+			<DisplayName>Static Drills</DisplayName>
+			<Blocks>
+				<Block Type="MyObjectBuilder_Drill" Subtype="StaticDrill" />
+				<Block Type="MyObjectBuilder_Drill" Subtype="StoneStaticDrill" />
+				<Block Type="MyObjectBuilder_Drill" Subtype="BasicStaticDrill" />
+				<Block Type="MyObjectBuilder_Drill" Subtype="AdvancedStaticDrill" />
+			</Blocks>
+		</BlockVariantGroup>
+
+	</BlockVariantGroups>
+</Definitions>
