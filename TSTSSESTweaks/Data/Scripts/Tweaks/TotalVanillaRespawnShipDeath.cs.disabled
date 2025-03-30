@@ -1,0 +1,51 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Sandbox.Definitions;
+using VRage.Game.Components;
+using Sandbox.ModAPI;
+using VRage.Utils;
+
+namespace TotalVanillaRespawnShipDeath
+{
+	[MySessionComponentDescriptor(MyUpdateOrder.NoUpdate, priority: int.MaxValue)]
+	public class TotalVanillaRespawnShipDeath : MySessionComponentBase
+	{
+		public override void LoadData()
+		{
+			base.LoadData();
+			foreach (KeyValuePair<string, MyRespawnShipDefinition> k in MyDefinitionManager.Static.GetRespawnShipDefinitions())
+			{
+				if (k.Key == "RespawnPlanetPod")
+				{
+					k.Value.Enabled = false;
+					k.Value.Prefab.AvailableInSurvival = false;
+					k.Value.UseForSpace = false;
+					k.Value.UseForPlanetsWithAtmosphere = false;
+					k.Value.UseForPlanetsWithoutAtmosphere  = false;
+					continue;
+				}
+				if (k.Key == "RespawnMoonPod")
+				{
+                    k.Value.Enabled = false;
+                    k.Value.Prefab.AvailableInSurvival = false;
+                    k.Value.UseForSpace = false;
+                    k.Value.UseForPlanetsWithAtmosphere = false;
+                    k.Value.UseForPlanetsWithoutAtmosphere = false;
+                    continue;
+				}
+				if (k.Key == "RespawnSpacePod")
+				{
+                    k.Value.Enabled = false;
+                    k.Value.Prefab.AvailableInSurvival = false;
+                    k.Value.UseForSpace = false;
+                    k.Value.UseForPlanetsWithAtmosphere = false;
+                    k.Value.UseForPlanetsWithoutAtmosphere = false;
+                    continue;
+				}
+			}
+		}
+	}
+}

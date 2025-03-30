@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <ContainerTypes>
+
+        <ContainerType CountMin="3" CountMax="6">
+            <Id>
+                <TypeId>ContainerTypeDefinition</TypeId>
+                <SubtypeId>IceBuy</SubtypeId>
+            </Id>
+            <Items>
+                <Item AmountMin="50000" AmountMax="200000">
+                    <Frequency>1.0</Frequency>
+                    <Id>
+                        <TypeId>Ore</TypeId>
+                        <SubtypeId>Ice</SubtypeId>
+                    </Id>
+                </Item>
+            </Items>
+        </ContainerType>
+
+    </ContainerTypes>
+</Definitions>

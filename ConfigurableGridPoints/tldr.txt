@@ -1,0 +1,7 @@
+- use new sharetrack API
+- make {thing} happen when grid that contains {block subtype}
+- i.e. make the points turn red in shift + T when over limit
+- probably should port the new CGP grid point features over to SC sharetrack
+- fork the slimmed down ish CGPGridPoints
+
+- can make into base mod + addon later for public-facing release

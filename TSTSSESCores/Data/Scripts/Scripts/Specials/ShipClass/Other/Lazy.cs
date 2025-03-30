@@ -17,21 +17,11 @@ namespace MIG.SpecCores
         private bool HasCorrectValue = false;
         private Func<T, T> getter;
         private T m_value = default(T);
-        public event Action<T,T> Changed;
         
         public T Value
         { 
             get {
-                if (ShouldUpdate())
-                {
-                    var newValue = getter(m_value);
-                    if (!newValue.Equals(m_value))
-                    {
-                        var oldValue = m_value;
-                        m_value = newValue;
-                        Changed?.Invoke(oldValue, newValue);
-                    }
-                }
+                if (ShouldUpdate()) { m_value = getter(m_value); }
                 return m_value;
             } 
         }

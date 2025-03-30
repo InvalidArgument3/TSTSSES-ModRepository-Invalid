@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <CubeBlocks>
+    <Definition xsi:type="MyObjectBuilder_BeaconDefinition">
+      <Id>
+        <TypeId>Beacon</TypeId>
+        <SubtypeId>SuitOrganicInducer</SubtypeId>
+      </Id>
+      <DisplayName>Tower: Organic Inducer</DisplayName>
+      <Icon>Textures\GUI\Icons\MiniAntenna.png</Icon>
+      <Description>Charges suit energy reserves when in range. Do not use to boil water.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="2"/>
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models\BadTenna.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="10" />
+        <Component Subtype="Detector" Count="20" />
+        <Component Subtype="PowerCell" Count="120" />
+        <Component Subtype="Superconductor" Count="100" />
+        <Component Subtype="Motor" Count="10" />
+        <Component Subtype="Computer" Count="20" />
+        <Component Subtype="SteelPlate" Count="10" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <MountPoints>
+        <MountPoint Side="Front" ExclusionMask="1" PropertiesMask="2" StartX="0" StartY="0" EndX="1" EndY="1" />
+      </MountPoints>
+      <BuildProgressModels>    
+        <Model BuildPercentUpperBound="1.00" File="Models\BadTenna_BS1.mwm" />
+      </BuildProgressModels>
+      <BlockPairName>SuitOrganicInducer</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <BuildTimeSeconds>20</BuildTimeSeconds>
+      <MaxBroadcastRadius>1000</MaxBroadcastRadius>
+      <MaxBroadcastPowerDrainkW>100000</MaxBroadcastPowerDrainkW>
+      <Flare>BeaconLarge</Flare>
+      <ResourceSinkGroup>Utility</ResourceSinkGroup>
+      <Public>true</Public>
+      <DamageEffectName>Damage_Electrical_Damaged_Antenna</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <PrimarySound>BlockProjectorOn</PrimarySound>
+      <IdleSound>BlockProjectorOff</IdleSound>
+      <EmissiveColorPreset>Extended</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>50</PCU>
+      <IsAirTight>false</IsAirTight>      
+    </Definition>
+  </CubeBlocks>
+</Definitions>

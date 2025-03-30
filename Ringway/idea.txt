@@ -1,0 +1,8 @@
+based off of https://steamcommunity.com/sharedfiles/filedetails/?id=3289703136
+
+- add MVSP cool particle effect at center of area when jumping (and receiving?)
+- broadcast into chat?
+- need admin comps
+- could flesh it out more, or have it just be an admin only thing
+- use an action relay and send a signal to...X to jump
+- faction variation might be cool, if there's time and it works.

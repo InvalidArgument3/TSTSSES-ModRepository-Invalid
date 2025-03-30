@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <RespawnShips>
+    <!-- Trawler at position -Z -->
+    <Ship>
+      <Id>
+        <TypeId>RespawnShipDefinition</TypeId>
+        <SubtypeId>K37_Trawler_Respawn_1</SubtypeId>
+      </Id>
+      <DisplayName>K37 Trawler (-Z)</DisplayName>
+      <Icon>Textures\GUI\Icons\RespawnShips\k37.png</Icon>
+      <CooldownSeconds>900</CooldownSeconds>
+      <Prefab>K37 Trawler</Prefab>
+
+      <UseForSpace>true</UseForSpace>
+
+      <SpawnPosition x="0" y="9000000" z="-175000000" />
+      <!-- specific position -->
+      <SpawnPositionDispersionMin>10000</SpawnPositionDispersionMin>
+      <!-- minimum deviation from position -->
+      <SpawnPositionDispersionMax>100000</SpawnPositionDispersionMax>
+      <!-- maximum deviation from position -->
+
+      <InitialLinearVelocity x="0" y="0" z="0" />
+      <InitialAngularVelocity x="0.0" y="0.0" z="0.0" />
+
+      <HelpTextLocalizationId>RespawnScreeenHelpTextSpawn</HelpTextLocalizationId>
+    </Ship>
+
+    <!-- Trawler at position -X -->
+    <Ship>
+      <Id>
+        <TypeId>RespawnShipDefinition</TypeId>
+        <SubtypeId>K37_Trawler_Respawn_2</SubtypeId>
+      </Id>
+      <DisplayName>K37 Trawler (-X)</DisplayName>
+      <Icon>Textures\GUI\Icons\RespawnShips\k37.png</Icon>
+      <CooldownSeconds>900</CooldownSeconds>
+      <Prefab>K37 Trawler</Prefab>
+
+      <UseForSpace>true</UseForSpace>
+
+      <SpawnPosition x="-175000000" y="17000000" z="0" />
+      <!-- specific position -->
+      <SpawnPositionDispersionMin>10000</SpawnPositionDispersionMin>
+      <!-- minimum deviation from position -->
+      <SpawnPositionDispersionMax>100000</SpawnPositionDispersionMax>
+      <!-- maximum deviation from position -->
+
+      <InitialLinearVelocity x="0" y="0" z="0" />
+      <InitialAngularVelocity x="0.0" y="0.0" z="0.0" />
+
+      <HelpTextLocalizationId>RespawnScreeenHelpTextSpawn</HelpTextLocalizationId>
+    </Ship>
+
+    <!-- Trawler at position +Z -->
+    <Ship>
+      <Id>
+        <TypeId>RespawnShipDefinition</TypeId>
+        <SubtypeId>K37_Trawler_Respawn_3</SubtypeId>
+      </Id>
+      <DisplayName>K37 Trawler (+Z)</DisplayName>
+      <Icon>Textures\GUI\Icons\RespawnShips\k37.png</Icon>
+      <CooldownSeconds>900</CooldownSeconds>
+      <Prefab>K37 Trawler</Prefab>
+
+      <UseForSpace>true</UseForSpace>
+
+      <SpawnPosition x="0" y="-9000000" z="175000000" />
+      <!-- specific position -->
+      <SpawnPositionDispersionMin>10000</SpawnPositionDispersionMin>
+      <!-- minimum deviation from position -->
+      <SpawnPositionDispersionMax>100000</SpawnPositionDispersionMax>
+      <!-- maximum deviation from position -->
+
+      <InitialLinearVelocity x="0" y="0" z="0" />
+      <InitialAngularVelocity x="0.0" y="0.0" z="0.0" />
+
+      <HelpTextLocalizationId>RespawnScreeenHelpTextSpawn</HelpTextLocalizationId>
+    </Ship>
+
+    <!-- Trawler at position +X -->
+    <Ship>
+      <Id>
+        <TypeId>RespawnShipDefinition</TypeId>
+        <SubtypeId>K37_Trawler_Respawn_4</SubtypeId>
+      </Id>
+      <DisplayName>K37 Trawler (+X)</DisplayName>
+      <Icon>Textures\GUI\Icons\RespawnShips\k37.png</Icon>
+      <CooldownSeconds>900</CooldownSeconds>
+      <Prefab>K37 Trawler</Prefab>
+
+      <UseForSpace>true</UseForSpace>
+
+      <SpawnPosition x="175000000" y="-17000000" z="0" />
+      <!-- specific position -->
+      <SpawnPositionDispersionMin>10000</SpawnPositionDispersionMin>
+      <!-- minimum deviation from position -->
+      <SpawnPositionDispersionMax>100000</SpawnPositionDispersionMax>
+      <!-- maximum deviation from position -->
+
+      <InitialLinearVelocity x="0" y="0" z="0" />
+      <InitialAngularVelocity x="0.0" y="0.0" z="0.0" />
+
+      <HelpTextLocalizationId>RespawnScreeenHelpTextSpawn</HelpTextLocalizationId>
+    </Ship>
+
+  </RespawnShips>
+</Definitions>

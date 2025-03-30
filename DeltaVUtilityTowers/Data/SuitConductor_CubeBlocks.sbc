@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <CubeBlocks>
+    <Definition xsi:type="MyObjectBuilder_BeaconDefinition">
+      <Id>
+        <TypeId>Beacon</TypeId>
+        <SubtypeId>SuitOrganicConductor</SubtypeId>
+      </Id>
+      <DisplayName>Tower: Organic Conductor</DisplayName>
+      <Icon>Textures\GUI\Icons\LongboiArray.dds</Icon>
+      <Description>Targets hostile suits within range and repulses them with a static charge after a short delay.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="7" z="1"/>
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models\Cubes\Antenna\LongboiArray.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="10" />
+        <Component Subtype="Detector" Count="20" />
+        <Component Subtype="PowerCell" Count="120" />
+        <Component Subtype="Superconductor" Count="100" />
+        <Component Subtype="Motor" Count="10" />
+        <Component Subtype="Computer" Count="20" />
+        <Component Subtype="SteelPlate" Count="10" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <MountPoints>
+        <MountPoint Side="Bottom" StartX="0.00" StartY="0.00" EndX="1.00" EndY="1.00"/>
+      </MountPoints>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound="0.33" File="Models\Cubes\Antenna\LongboiArray_BS3.mwm"/>
+        <Model BuildPercentUpperBound="0.67" File="Models\Cubes\Antenna\LongboiArray_BS2.mwm"/>
+        <Model BuildPercentUpperBound="1.00" File="Models\Cubes\Antenna\LongboiArray_BS1.mwm"/>
+      </BuildProgressModels>
+      <BlockPairName>SuitOrganicConductor</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <BuildTimeSeconds>20</BuildTimeSeconds>
+      <MirroringY>Z</MirroringY>
+      <MirroringZ>Y</MirroringZ>
+      <MaxBroadcastRadius>1000</MaxBroadcastRadius>
+      <MaxBroadcastPowerDrainkW>100000</MaxBroadcastPowerDrainkW>
+      <Flare>BeaconLarge</Flare>
+      <ResourceSinkGroup>Utility</ResourceSinkGroup>
+      <Public>true</Public>
+      <DamageEffectName>Damage_Electrical_Damaged_Antenna</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <PrimarySound>BlockProjectorOn</PrimarySound>
+      <IdleSound>BlockProjectorOff</IdleSound>
+      <EmissiveColorPreset>Extended</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>50</PCU>
+      <IsAirTight>false</IsAirTight>      
+    </Definition>
+  </CubeBlocks>
+</Definitions>

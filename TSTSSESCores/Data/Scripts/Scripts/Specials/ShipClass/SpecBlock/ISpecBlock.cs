@@ -18,19 +18,8 @@ namespace MIG.SpecCores
         public Limits FoundLimits = new Limits();
         public Limits TotalLimits = new Limits();
         public string status;
-        public bool ValuesChanged = true;
         
         public float Priority => GetLimits(false)[LimitsChecker.TYPE_PRIORITY];
-
-        public ISpecBlock()
-        {
-            IsStatic.Changed += IsStaticOnChanged;
-        }
-
-        private void IsStaticOnChanged(bool arg1, bool arg2)
-        {
-            ValuesChanged = true;
-        }
 
         public Limits GetLimits(bool hooks = true)
         {
@@ -38,7 +27,6 @@ namespace MIG.SpecCores
             if (hooks)
             {
                 Hooks.InvokeLimitsInterceptor(this, StaticLimits, DynamicLimits);
-                ValuesChanged = true;
             }
             return new Limits(limits);
         }
@@ -123,7 +111,6 @@ namespace MIG.SpecCores
         protected void SetOptions(Limits staticLimits, Limits dynamicLimits = null) {
             this.StaticLimits = staticLimits;
             this.DynamicLimits = dynamicLimits;
-            ValuesChanged = true;
         }
 
         

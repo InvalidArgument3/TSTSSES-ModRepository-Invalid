@@ -1,0 +1,121 @@
+<?xml version="1.0"?>
+<Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<CubeBlocks>
+		<Definition xsi:type="MyObjectBuilder_WeaponBlockDefinition">
+			<Id>
+				<TypeId>SmallMissileLauncher</TypeId>
+				<SubtypeId>FixedMicrowave</SubtypeId>
+			</Id>
+			<DisplayName>Microwave Cannon</DisplayName>
+			<Icon>Textures\GUI\Icons\AstronautBackpack.dds</Icon>
+			<Description>Shoots your friendly neighbourhood APFSDSFSDSFSDS</Description>
+			<CubeSize>Large</CubeSize>
+			<GuiVisible>false</GuiVisible>
+			<BlockTopology>TriangleMesh</BlockTopology>
+			<Size x="1" y="1" z="6" />
+			<ModelOffset x="0" y="0" z="0" />
+			<Model>Models\FixedMicrowave.mwm</Model>
+			<Components>
+				<Component Subtype="SteelPlate" Count="1" />
+				<Component Subtype="Construction" Count="1" />
+				<Component Subtype="LargeTube" Count="3" />
+				<Component Subtype="Computer" Count="1" />
+				<Component Subtype="SteelPlate" Count="1" />
+			</Components>
+			<CriticalComponent Subtype="Computer" Index="0" />
+			<Center x="0" y="0" z="0" />
+			<BuildTimeSeconds>6</BuildTimeSeconds>
+			<EdgeType>Light</EdgeType>
+			<WeaponDefinitionId Subtype="MicrowaveWep" />
+			<ResourceSinkGroup>Defense</ResourceSinkGroup>
+			<InventoryMaxVolume>0.006</InventoryMaxVolume>
+			<DamageEffectName>Damage_WeapExpl_Damaged</DamageEffectName>
+			<DamagedSound>ParticleWeapExpl</DamagedSound>
+			<DestroyEffect>BlockDestroyedExplosion_Small</DestroyEffect>
+			<DestroySound>WepSmallWarheadExpl</DestroySound>
+			<TargetingGroups>
+			</TargetingGroups>
+			<PCU>150</PCU>
+		</Definition>
+	</CubeBlocks>
+	<Weapons>
+		<Weapon>
+			<Id>
+				<TypeId>WeaponDefinition</TypeId>
+				<SubtypeId>MicrowaveWep</SubtypeId>
+			</Id>
+			<MissileAmmoData RateOfFire="80" ShootSoundName="WepLargeCalibreShot" FlightSoundName="HeavyShellFlightSound" RicochetSoundName="ImpMetalMetalCat3" ShotsInBurst="1" />
+			<DeviateShotAngle>0</DeviateShotAngle>
+			<DeviateShotAngleAiming>0</DeviateShotAngleAiming>
+			<NoAmmoSoundName>WepPlayRifleNoAmmo</NoAmmoSoundName>
+			<AmmoMagazines>
+				<AmmoMagazine Subtype="MicrowaveMag" />
+			</AmmoMagazines>
+			<ReloadTime>4000</ReloadTime>
+			<Effects>
+				<Effect Action="Shoot" Dummy="Muzzle_Missile" Particle="Muzzle_Flash_LargeCalibre" Loop="false" InstantStop="false" OffsetX="0" OffsetY="0" OffsetZ="-3.5"/>
+			</Effects>
+			</Weapon> <!--gren-->
+		</Weapons>
+		<AmmoMagazines>
+			<AmmoMagazine>
+				<Id>
+					<TypeId>AmmoMagazine</TypeId>
+					<SubtypeId>MicrowaveMag</SubtypeId>
+				</Id>
+				<DisplayName>Ammo Microwave</DisplayName>
+				<Icon>Textures\Icons\Magazines\GrenadeCrate.png</Icon>
+				<Size>
+					<X>0.25</X>
+					<Y>0.2</Y>
+					<Z>0.2</Z>
+				</Size><Health>999999</Health>
+				<Mass>60</Mass>
+				<Volume>30</Volume>
+				<Model>Models\Magazines\GrenadeCrate.mwm</Model>
+				<PhysicalMaterial>Ammo</PhysicalMaterial>
+				<Capacity>1</Capacity>
+				<AmmoDefinitionId Subtype="MicrowaveAmmo" />
+				<MinimumOfferAmount>100</MinimumOfferAmount>
+				<MaximumOfferAmount>1000</MaximumOfferAmount>
+				<MinimumOrderAmount>100</MinimumOrderAmount>
+				<MaximumOrderAmount>2000</MaximumOrderAmount>
+				<CanPlayerOrder>true</CanPlayerOrder>
+				</AmmoMagazine> <!--gren-->
+			</AmmoMagazines>
+			<Ammos>
+				<Ammo xsi:type="MyObjectBuilder_MissileAmmoDefinition">
+					<Id>
+						<TypeId>AmmoDefinition</TypeId>
+						<SubtypeId>MicrowaveAmmo</SubtypeId>
+					</Id>
+					<BasicProperties>
+						<DesiredSpeed>1000</DesiredSpeed>
+						<SpeedVariance>0</SpeedVariance>
+						<MaxTrajectory>4000</MaxTrajectory>
+						<IsExplosive>true</IsExplosive>
+						<BackkickForce>15000</BackkickForce>
+						<PhysicalMaterial>LargeShell</PhysicalMaterial>
+						<ExplosiveDamageMultiplier>1.2</ExplosiveDamageMultiplier>
+						<DeathMessage>CauseOfDeath_HeavyWeapons</DeathMessage>
+					</BasicProperties>
+					<MissileProperties>
+						<MissileMass>1000</MissileMass>
+						<MissileExplosionRadius>3</MissileExplosionRadius>
+						<MissileModelName>Models\Weapons\LargeCalibreShell.mwm</MissileModelName>
+						<MissileAcceleration>0</MissileAcceleration>
+						<MissileInitialSpeed>1000</MissileInitialSpeed>
+						<MissileSkipAcceleration>false</MissileSkipAcceleration>
+						<MissileExplosionDamage>0</MissileExplosionDamage>
+						<MissileHealthPool>4000</MissileHealthPool>
+						<MissileTrailEffect>LargeCalibreGun_Tracer</MissileTrailEffect>
+						<MissileGravityEnabled>true</MissileGravityEnabled>
+						<MissileMinRicochetAngle>50</MissileMinRicochetAngle>
+						<MissileMaxRicochetAngle>80</MissileMaxRicochetAngle>
+						<MissileMinRicochetProbability>0.25</MissileMinRicochetProbability>
+						<MissileMaxRicochetProbability>0.85</MissileMaxRicochetProbability>
+						<MissileRicochetDamage>3000</MissileRicochetDamage>
+					</MissileProperties>
+				</Ammo>
+			</Ammos>
+		</Definitions>

@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <VoxelMaterials>
+	    <VoxelMaterial xsi:type="MyObjectBuilder_Dx11VoxelMaterialDefinition">
+            <Id>
+                <TypeId>VoxelMaterialDefinition</TypeId>
+                <SubtypeId>MoonletGround</SubtypeId>
+            </Id>
+            <SpawnsInAsteroids>false</SpawnsInAsteroids>
+            <SpawnsFromMeteorites>false</SpawnsFromMeteorites>
+            <MaterialTypeName>MoonSoil</MaterialTypeName>
+            <MinedOre>Stone</MinedOre>
+            <MinedOreRatio>1</MinedOreRatio>
+            <CanBeHarvested>true</CanBeHarvested>
+            <IsRare>false</IsRare>
+
+            <VoxelHandPreview>Textures\Voxels\placeholder_Thumbnail.dds</VoxelHandPreview>
+            <ColorMetalXZnY>Textures\Voxels\MoonletGround_cm.dds</ColorMetalXZnY>
+            <NormalGlossXZnY>Textures\Voxels\MoonletGround_ng.dds</NormalGlossXZnY>
+            <ExtXZnY>Textures\Voxels\Dummy_add.dds</ExtXZnY>
+			<ExtDetailScale>0.005</ExtDetailScale>
+			<Scale>500</Scale>
+			<Far1Distance>100</Far1Distance>
+			<Far2Distance>500</Far2Distance>
+			<Far1Scale>300</Far1Scale>
+			<Far2Scale>2000</Far2Scale>
+			<Far3Distance>5000</Far3Distance>
+            <Far3Color>
+                <X>0.1</X>
+                <Y>0.1</Y>
+                <Z>0.1</Z>
+                <W>1</W>
+            </Far3Color>
+            <SimpleTilingSetup>
+            </SimpleTilingSetup>
+
+            <ScaleMultiplier>6</ScaleMultiplier>
+
+			<FoliageColorTextureArray>
+                <Color>Textures\Voxels\MoonletGround_cm.dds</Color>
+            </FoliageColorTextureArray>
+            <FoliageNormalTextureArray>
+                <Normal>Textures\Voxels\MoonletGround_ng.dds</Normal>
+            </FoliageNormalTextureArray>
+            <FoliageDensity>1</FoliageDensity>
+            <FoliageScale>
+                <X>0.5</X>
+                <Y>0.5</Y>
+            </FoliageScale>
+            <FoliageRandomRescaleMult>0.3</FoliageRandomRescaleMult>
+            <FoliageType>1</FoliageType>			
+
+    </VoxelMaterial>
+  </VoxelMaterials>
+</Definitions>

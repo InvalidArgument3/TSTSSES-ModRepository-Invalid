@@ -104,6 +104,8 @@ namespace bobzone
                                 //character.Physics.AddForce(MyPhysicsForceType.APPLY_WORLD_FORCE, Vector3D.Normalize(character.WorldMatrix.Translation - zoneblock.WorldMatrix.Translation) * 1000 * character.Physics.Mass, null, null, applyImmediately: true);
                             }
                             MyVisualScriptLogicProvider.SetPlayersHydrogenLevel(player.Identity.IdentityId, 1f);
+                            MyVisualScriptLogicProvider.SetPlayersOxygenLevel(player.Identity.IdentityId, 1f);
+                            MyVisualScriptLogicProvider.SetPlayersEnergyLevel(player.Identity.IdentityId, 1f);
 
                         }
                     }

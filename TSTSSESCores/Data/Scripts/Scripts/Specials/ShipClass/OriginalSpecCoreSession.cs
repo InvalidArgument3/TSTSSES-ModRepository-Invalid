@@ -71,7 +71,7 @@ namespace MIG.SpecCores
             
             GUI.InitLimitedBlockGui(Settings.LimitedBlocksCanBe);
             GUI.InitSpecBlockGui(Settings.SpecBlocksCanBe);
-
+            
 
             
             if (LoadingErrors.Count > 0)
@@ -428,7 +428,7 @@ namespace MIG.SpecCores
         {
             Hooks.Init();
             Common.Init();
-            FrameExecutor.addDelayedLogic(360, (frame) => { Common.SendChatMessage("[MIG] SpecCores v1.2.5 inited!"); });
+            FrameExecutor.addDelayedLogic(360, (frame) => { Common.SendChatMessage("\nNote: Is responsible for grid limits.", "Grid Core Active!"); });
             MyAPIGateway.Entities.OnEntityAdd += OnEntityAdded;
         }
 

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Factions>
+
+    <Faction Tag="GLF-NPC" Founder="Great Leader">
+      <Id>
+        <TypeId>MyObjectBuilder_FactionDefinition</TypeId>
+        <SubtypeId>GLF-NPC</SubtypeId>
+      </Id>
+      <DisplayName>Ganymede Liberation Front</DisplayName>
+      <IsDefault>true</IsDefault>
+      <StartingBalance>1000000000</StartingBalance>
+      <Type>Trader</Type>
+      <AcceptHumans>true</AcceptHumans>
+      <AutoAcceptMember>false</AutoAcceptMember>
+      <AutoAcceptPeace>false</AutoAcceptPeace>
+      <DiscoveredByDefault>true</DiscoveredByDefault>
+      <DefaultRelation>Neutral</DefaultRelation>
+      <Description>The Ganymede Liberation Front (GLF) emerged from a workers' revolt against the Enceladus Corporation (ECO) after years of labor exploitation.</Description>
+      <FactionIcon>Textures\GLF.png</FactionIcon>
+    </Faction>
+
+  </Factions>
+</Definitions>

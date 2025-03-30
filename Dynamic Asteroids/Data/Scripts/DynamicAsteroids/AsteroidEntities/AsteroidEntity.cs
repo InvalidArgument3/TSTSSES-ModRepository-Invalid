@@ -1,27 +1,23 @@
-﻿using System;
-using System.IO;
-using Sandbox.Definitions;
-using Sandbox.Engine.Physics;
-using Sandbox.Game;
-using Sandbox.Game.Entities;
+﻿using Sandbox.Game.Entities;
 using Sandbox.ModAPI;
-using VRage;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using Sandbox.Game;
 using VRage.Game;
 using VRage.Game.Components;
 using VRage.Game.Entity;
 using VRage.Game.ModAPI;
 using VRage.Game.ModAPI.Interfaces;
 using VRage.ModAPI;
-using VRage.ObjectBuilders;
-using VRage.ObjectBuilders.Private;
 using VRage.Utils;
 using VRageMath;
 using CollisionLayers = Sandbox.Engine.Physics.MyPhysics.CollisionLayers;
+using Color = VRageMath.Color;
+using VRage;
 
-namespace DynamicAsteroids.Data.Scripts.DynamicAsteroids.AsteroidEntities
-{
-    public enum AsteroidType
-    {
+namespace DynamicAsteroids.Data.Scripts.DynamicAsteroids.AsteroidEntities {
+    public enum AsteroidType {
         Ice,
         Stone,
         Iron,
@@ -35,33 +31,34 @@ namespace DynamicAsteroids.Data.Scripts.DynamicAsteroids.AsteroidEntities
         Uraninite
     }
 
-    public class AsteroidEntity : MyEntity, IMyDestroyableObject
-    {
-        private static readonly string[] IceAsteroidModels = {
-        @"Models\IceAsteroid_1.mwm",
-        @"Models\IceAsteroid_2.mwm",
-        @"Models\IceAsteroid_3.mwm",
-        @"Models\IceAsteroid_4.mwm"
-    };
+    public class AsteroidEntity : MyEntity, IMyDestroyableObject {
+        private static readonly string[] IceAsteroidModels =
+        {
+            @"Models\IceAsteroid_1.mwm",
+            @"Models\IceAsteroid_2.mwm",
+            @"Models\IceAsteroid_3.mwm",
+            @"Models\IceAsteroid_4.mwm"
+        };
 
-        private static readonly string[] StoneAsteroidModels = {
-        @"Models\StoneAsteroid_1.mwm",
-        @"Models\StoneAsteroid_2.mwm",
-        @"Models\StoneAsteroid_3.mwm",
-        @"Models\StoneAsteroid_4.mwm",
-        @"Models\StoneAsteroid_5.mwm",
-        @"Models\StoneAsteroid_6.mwm",
-        @"Models\StoneAsteroid_7.mwm",
-        @"Models\StoneAsteroid_8.mwm",
-        @"Models\StoneAsteroid_9.mwm",
-        @"Models\StoneAsteroid_10.mwm",
-        @"Models\StoneAsteroid_11.mwm",
-        @"Models\StoneAsteroid_12.mwm",
-        @"Models\StoneAsteroid_13.mwm",
-        @"Models\StoneAsteroid_14.mwm",
-        @"Models\StoneAsteroid_15.mwm",
-        @"Models\StoneAsteroid_16.mwm"
-    };
+        private static readonly string[] StoneAsteroidModels =
+        {
+            @"Models\StoneAsteroid_1.mwm",
+            @"Models\StoneAsteroid_2.mwm",
+            @"Models\StoneAsteroid_3.mwm",
+            @"Models\StoneAsteroid_4.mwm",
+            @"Models\StoneAsteroid_5.mwm",
+            @"Models\StoneAsteroid_6.mwm",
+            @"Models\StoneAsteroid_7.mwm",
+            @"Models\StoneAsteroid_8.mwm",
+            @"Models\StoneAsteroid_9.mwm",
+            @"Models\StoneAsteroid_10.mwm",
+            @"Models\StoneAsteroid_11.mwm",
+            @"Models\StoneAsteroid_12.mwm",
+            @"Models\StoneAsteroid_13.mwm",
+            @"Models\StoneAsteroid_14.mwm",
+            @"Models\StoneAsteroid_15.mwm",
+            @"Models\StoneAsteroid_16.mwm"
+        };
 
         private static readonly string[] IronAsteroidModels = { @"Models\OreAsteroid_Iron.mwm" };
         private static readonly string[] NickelAsteroidModels = { @"Models\OreAsteroid_Nickel.mwm" };
@@ -73,461 +70,302 @@ namespace DynamicAsteroids.Data.Scripts.DynamicAsteroids.AsteroidEntities
         private static readonly string[] PlatinumAsteroidModels = { @"Models\OreAsteroid_Platinum.mwm" };
         private static readonly string[] UraniniteAsteroidModels = { @"Models\OreAsteroid_Uraninite.mwm" };
 
-        private void CreateEffects(Vector3D position)
-        {
-            MyVisualScriptLogicProvider.CreateParticleEffectAtPosition("roidbreakparticle1", position);
-            MyVisualScriptLogicProvider.PlaySingleSoundAtPosition("roidbreak", position);
-        }
+        public AsteroidType Type { get; private set; }
+        public string ModelString = "";
+        public AsteroidPhysicalProperties Properties { get; private set; }
 
-        public static AsteroidEntity CreateAsteroid(Vector3D position, float size, Vector3D initialVelocity, AsteroidType type, Quaternion? rotation = null, long? entityId = null)
-        {
+        public float Integrity => Properties.CurrentIntegrity;
+
+        public bool IsUnstable() => Properties.IsUnstable();
+
+        public void UpdateInstability() => Properties.UpdateInstability();
+
+        public void AddInstability(float amount) => Properties.AddInstability(amount);
+
+        // Required property implementation for `IMyDestroyableObject`
+        public bool UseDamageSystem => true;
+
+        public static AsteroidEntity CreateAsteroid(Vector3D position, float size, Vector3D initialVelocity, AsteroidType type, Quaternion? rotation = null, long? entityId = null) {
             var ent = new AsteroidEntity();
-            Log.Info($"Creating AsteroidEntity at Position: {position}, Size: {size}, InitialVelocity: {initialVelocity}, Type: {type}");
+            try {
+                if (entityId.HasValue)
+                    ent.EntityId = entityId.Value;
 
-            if (entityId.HasValue)
-            {
-                ent.EntityId = entityId.Value;
-            }
+                var massRange = AsteroidSettings.MinMaxMassByType[type];
+                string ringDebugInfo;
+                float distanceScale = AsteroidSettings.CalculateMassScaleByDistance(position, MainSession.I.RealGasGiantsApi, out ringDebugInfo);
 
-            try
-            {
-                ent.Init(position, size, initialVelocity, type, rotation);
+                float randomFactor = (float)MainSession.I.Rand.NextDouble() * 0.2f - 0.1f;
+                float finalMass = MathHelper.Lerp(massRange.MinMass, massRange.MaxMass, distanceScale + randomFactor);
+                finalMass = MathHelper.Clamp(finalMass, massRange.MinMass, massRange.MaxMass);
+
+                // Create physical properties first
+                ent.Properties = AsteroidPhysicalProperties.CreateFromMass(finalMass, AsteroidPhysicalProperties.DEFAULT_DENSITY, ent);
+
+                if (!rotation.HasValue && MyAPIGateway.Session.IsServer) {
+                    Vector3D randomAxis = RandVector();
+                    float randomAngle = (float)(MainSession.I.Rand.NextDouble() * Math.PI * 2);
+                    rotation = Quaternion.CreateFromAxisAngle(randomAxis, randomAngle);
+                }
+                else if (!rotation.HasValue) {
+                    rotation = Quaternion.Identity;
+                }
+
+                // Pass the calculated diameter instead of the input size
+                ent.Init(position, ent.Properties.Diameter, initialVelocity, type, rotation);
+                MyEntities.Add(ent);
+
+                if (!MyEntities.EntityExists(ent.EntityId)) {
+                    Log.Warning($"Asteroid {ent.EntityId} failed to be added to the scene.");
+                    return null;
+                }
+
+                Log.Info($"Spawned ring asteroid {ent.EntityId}:" +
+                         $"\nType: {type}" +
+                         $"\nMass Range: {massRange.MinMass:N0}kg - {massRange.MaxMass:N0}kg" +
+                         $"\nFinal Mass: {finalMass:N0}kg" +
+                         $"\nFinal Diameter: {ent.Properties.Diameter:F2}m" +
+                         $"\nRandom Factor: {randomFactor:F3}" +
+                         $"\nPosition: {position}" +
+                         $"\nVelocity: {initialVelocity.Length():F1}m/s" +
+                         $"\n{ringDebugInfo}");
+
+                return ent;
             }
-            catch (Exception ex)
-            {
-                Log.Exception(ex, typeof(AsteroidEntity), "Failed to initialize AsteroidEntity");
+            catch (Exception ex) {
+                Log.Exception(ex, typeof(AsteroidEntity), "Exception during asteroid creation");
                 return null;
             }
-
-            if (ent.EntityId == 0)
-            {
-                Log.Warning("EntityId is 0, which is invalid!");
-                return null;
-            }
-
-            return ent;
         }
 
-        private void Init(Vector3D position, float size, Vector3D initialVelocity, AsteroidType type, Quaternion? rotation)
-        {
-            Log.Info($"AsteroidEntity.Init called with position: {position}, size: {size}, initialVelocity: {initialVelocity}, type: {type}");
-            try
-            {
-                if (MainSession.I == null)
-                {
-                    Log.Exception(new Exception("MainSession.I is null"), typeof(AsteroidEntity), "MainSession.I is not initialized.");
-                    return;
-                }
-                Log.Info("MainSession.I is initialized.");
-
-                if (MainSession.I.ModContext == null)
-                {
-                    Log.Exception(new Exception("MainSession.I.ModContext is null"), typeof(AsteroidEntity), "MainSession.I.ModContext is not initialized.");
-                    return;
-                }
-                Log.Info("MainSession.I.ModContext is initialized.");
-
-                string modPath = MainSession.I.ModContext.ModPath;
-                if (string.IsNullOrEmpty(modPath))
-                {
-                    Log.Exception(new Exception("MainSession.I.ModContext.ModPath is null or empty"), typeof(AsteroidEntity), "MainSession.I.ModContext.ModPath is not initialized.");
-                    return;
-                }
-                Log.Info($"ModPath: {modPath}");
-
-                if (MainSession.I.Rand == null)
-                {
-                    Log.Exception(new Exception("MainSession.I.Rand is null"), typeof(AsteroidEntity), "Random number generator is not initialized.");
-                    return;
-                }
-
+        private void Init(Vector3D position, float size, Vector3D initialVelocity, AsteroidType type, Quaternion? rotation) {
+            try {
                 Type = type;
-                Log.Info($"Asteroid Type: {type}");
+                ModelString = SelectModelForAsteroidType(type);
 
-                switch (type)
-                {
-                    case AsteroidType.Ice:
-                        if (IceAsteroidModels.Length == 0)
-                        {
-                            Log.Info("IceAsteroidModels array is empty");
-                        }
-                        else
-                        {
-                            int modelIndex = MainSession.I.Rand.Next(IceAsteroidModels.Length);
-                            Log.Info($"Selected model index for Ice: {modelIndex}");
-                            ModelString = Path.Combine(modPath, IceAsteroidModels[modelIndex]);
-                        }
-                        break;
-                    case AsteroidType.Stone:
-                        if (StoneAsteroidModels.Length == 0)
-                        {
-                            Log.Info("StoneAsteroidModels array is empty");
-                        }
-                        else
-                        {
-                            int modelIndex = MainSession.I.Rand.Next(StoneAsteroidModels.Length);
-                            Log.Info($"Selected model index for Stone: {modelIndex}");
-                            ModelString = Path.Combine(modPath, StoneAsteroidModels[modelIndex]);
-                        }
-                        break;
-                    case AsteroidType.Iron:
-                        if (IronAsteroidModels.Length == 0)
-                        {
-                            Log.Info("IronAsteroidModels array is empty");
-                        }
-                        else
-                        {
-                            int modelIndex = MainSession.I.Rand.Next(IronAsteroidModels.Length);
-                            Log.Info($"Selected model index for Iron: {modelIndex}");
-                            ModelString = Path.Combine(modPath, IronAsteroidModels[modelIndex]);
-                        }
-                        break;
-                    case AsteroidType.Nickel:
-                        if (NickelAsteroidModels.Length == 0)
-                        {
-                            Log.Info("NickelAsteroidModels array is empty");
-                        }
-                        else
-                        {
-                            int modelIndex = MainSession.I.Rand.Next(NickelAsteroidModels.Length);
-                            Log.Info($"Selected model index for Nickel: {modelIndex}");
-                            ModelString = Path.Combine(modPath, NickelAsteroidModels[modelIndex]);
-                        }
-                        break;
-                    case AsteroidType.Cobalt:
-                        if (CobaltAsteroidModels.Length == 0)
-                        {
-                            Log.Info("CobaltAsteroidModels array is empty");
-                        }
-                        else
-                        {
-                            int modelIndex = MainSession.I.Rand.Next(CobaltAsteroidModels.Length);
-                            Log.Info($"Selected model index for Cobalt: {modelIndex}");
-                            ModelString = Path.Combine(modPath, CobaltAsteroidModels[modelIndex]);
-                        }
-                        break;
-                    case AsteroidType.Magnesium:
-                        if (MagnesiumAsteroidModels.Length == 0)
-                        {
-                            Log.Info("MagnesiumAsteroidModels array is empty");
-                        }
-                        else
-                        {
-                            int modelIndex = MainSession.I.Rand.Next(MagnesiumAsteroidModels.Length);
-                            Log.Info($"Selected model index for Magnesium: {modelIndex}");
-                            ModelString = Path.Combine(modPath, MagnesiumAsteroidModels[modelIndex]);
-                        }
-                        break;
-                    case AsteroidType.Silicon:
-                        if (SiliconAsteroidModels.Length == 0)
-                        {
-                            Log.Info("SiliconAsteroidModels array is empty");
-                        }
-                        else
-                        {
-                            int modelIndex = MainSession.I.Rand.Next(SiliconAsteroidModels.Length);
-                            Log.Info($"Selected model index for Silicon: {modelIndex}");
-                            ModelString = Path.Combine(modPath, SiliconAsteroidModels[modelIndex]);
-                        }
-                        break;
-                    case AsteroidType.Silver:
-                        if (SilverAsteroidModels.Length == 0)
-                        {
-                            Log.Info("SilverAsteroidModels array is empty");
-                        }
-                        else
-                        {
-                            int modelIndex = MainSession.I.Rand.Next(SilverAsteroidModels.Length);
-                            Log.Info($"Selected model index for Silver: {modelIndex}");
-                            ModelString = Path.Combine(modPath, SilverAsteroidModels[modelIndex]);
-                        }
-                        break;
-                    case AsteroidType.Gold:
-                        if (GoldAsteroidModels.Length == 0)
-                        {
-                            Log.Info("GoldAsteroidModels array is empty");
-                        }
-                        else
-                        {
-                            int modelIndex = MainSession.I.Rand.Next(GoldAsteroidModels.Length);
-                            Log.Info($"Selected model index for Gold: {modelIndex}");
-                            ModelString = Path.Combine(modPath, GoldAsteroidModels[modelIndex]);
-                        }
-                        break;
-                    case AsteroidType.Platinum:
-                        if (PlatinumAsteroidModels.Length == 0)
-                        {
-                            Log.Info("PlatinumAsteroidModels array is empty");
-                        }
-                        else
-                        {
-                            int modelIndex = MainSession.I.Rand.Next(PlatinumAsteroidModels.Length);
-                            Log.Info($"Selected model index for Platinum: {modelIndex}");
-                            ModelString = Path.Combine(modPath, PlatinumAsteroidModels[modelIndex]);
-                        }
-                        break;
-                    case AsteroidType.Uraninite:
-                        if (UraniniteAsteroidModels.Length == 0)
-                        {
-                            Log.Info("UraniniteAsteroidModels array is empty");
-                        }
-                        else
-                        {
-                            int modelIndex = MainSession.I.Rand.Next(UraniniteAsteroidModels.Length);
-                            Log.Info($"Selected model index for Uraninite: {modelIndex}");
-                            ModelString = Path.Combine(modPath, UraniniteAsteroidModels[modelIndex]);
-                        }
-                        break;
-                    default:
-                        Log.Info("Invalid AsteroidType, setting ModelString to empty.");
-                        ModelString = "";
-                        break;
-                }
-                Log.Info($"ModelString: {ModelString}");
+                // Don't create new Properties here, use the one created in CreateAsteroid
+                Log.Info($"Initializing asteroid at {position} with size {size} and type {type}");
 
-                if (string.IsNullOrEmpty(ModelString))
-                {
-                    Log.Exception(new Exception("ModelString is null or empty"), typeof(AsteroidEntity), "Failed to initialize asteroid entity");
-                    return; // Early exit if ModelString is not set
+                // Set up the model with the proper scale
+                float modelScale = size; // dividing by 2 is a bit too small when compared to the hitbox but would make an ok bounding sphere
+                Init(null, ModelString, null, modelScale);
+
+                if (string.IsNullOrEmpty(ModelString)) {
+                    Log.Warning($"Failed to assign model for asteroid type {type}");
                 }
 
-                Size = size;
-                _integrity = AsteroidSettings.BaseIntegrity * Size;
-                Log.Info($"Base Integrity: {AsteroidSettings.BaseIntegrity}, Size: {Size}, Total Integrity: {_integrity}");
+                PositionComp.SetPosition(position);
 
-                Log.Info($"Attempting to load model: {ModelString}");
-
-                Init(null, ModelString, null, Size);
-
-                Save = false;
-                NeedsWorldMatrix = true;
-                PositionComp.LocalAABB = new BoundingBox(-Vector3.Half * Size, Vector3.Half * Size);
-                Log.Info($"LocalAABB: {PositionComp.LocalAABB}");
-
-                Log.Info("Setting WorldMatrix");
-                if (rotation.HasValue)
-                {
-                    WorldMatrix = MatrixD.CreateFromQuaternion(rotation.Value) * MatrixD.CreateWorld(position, Vector3D.Forward, Vector3D.Up);
-                }
-                else
-                {
-                    var randomRotation = MatrixD.CreateFromQuaternion(Quaternion.CreateFromYawPitchRoll(
-                        (float)MainSession.I.Rand.NextDouble() * MathHelper.TwoPi,
-                        (float)MainSession.I.Rand.NextDouble() * MathHelper.TwoPi,
-                        (float)MainSession.I.Rand.NextDouble() * MathHelper.TwoPi));
-
-                    WorldMatrix = randomRotation * MatrixD.CreateWorld(position, Vector3D.Forward, Vector3D.Up);
+                if (rotation.HasValue) {
+                    MatrixD worldMatrix = MatrixD.CreateFromQuaternion(rotation.Value);
+                    worldMatrix.Translation = position;
+                    WorldMatrix = worldMatrix;
                 }
 
-                WorldMatrix.Orthogonalize();
-                Log.Info($"WorldMatrix: {WorldMatrix}");
-
-                Log.Info("Adding entity to MyEntities");
-                MyEntities.Add(this);
-                Log.Info($"{(MyAPIGateway.Session.IsServer ? "Server" : "Client")}: Added asteroid entity with ID {EntityId} to MyEntities");
-
-                Log.Info("Creating physics");
                 CreatePhysics();
-                Physics.LinearVelocity = initialVelocity + RandVector() * AsteroidSettings.VelocityVariability;
-                Physics.AngularVelocity = RandVector() * AsteroidSettings.GetRandomAngularVelocity(MainSession.I.Rand);
-                Log.Info($"Initial LinearVelocity: {Physics.LinearVelocity}, Initial AngularVelocity: {Physics.AngularVelocity}");
 
-                Log.Info($"Asteroid model {ModelString} loaded successfully with initial angular velocity: {Physics.AngularVelocity}");
+                if (Physics == null) {
+                    Log.Warning($"Physics creation failed for asteroid {EntityId}");
+                }
 
-                if (MyAPIGateway.Session.IsServer)
-                {
+                Physics.LinearVelocity = initialVelocity;
+
+                if (MyAPIGateway.Session.IsServer) {
                     SyncFlag = true;
                 }
+
+                Log.Info($"Asteroid {EntityId} initialized:" +
+                         $"\n - Position: {PositionComp.GetPosition()}" +
+                         $"\n - Velocity: {initialVelocity}" +
+                         $"\n - Model Scale: {modelScale}" +
+                         $"\n - Physics Radius: {Properties.Radius}");
             }
-            catch (Exception ex)
-            {
-                Log.Info($"Exception Type: {ex.GetType()}");
-                Log.Info($"Exception Message: {ex.Message}");
-                Log.Info($"Exception Stack Trace: {ex.StackTrace}");
-                if (ex.InnerException != null)
-                {
-                    Log.Info($"Inner Exception Type: {ex.InnerException.GetType()}");
-                    Log.Info($"Inner Exception Message: {ex.InnerException.Message}");
-                    Log.Info($"Inner Exception Stack Trace: {ex.InnerException.StackTrace}");
-                }
-                Log.Exception(ex, typeof(AsteroidEntity), $"Failed to load model: {ModelString}");
+            catch (Exception ex) {
+                Log.Exception(ex, typeof(AsteroidEntity), "Failed to initialize AsteroidEntity");
                 Flags &= ~EntityFlags.Visible;
             }
         }
 
-        public float Size;
-        public string ModelString = "";
-        public AsteroidType Type;
-        private float _integrity;
-
-        public void SplitAsteroid()
-        {
-            if (!MyAPIGateway.Session.IsServer)
-                return;
-
-            int splits = MainSession.I.Rand.Next(2, 5);
-
-            if (splits > Size)
-                splits = (int)Math.Ceiling(Size);
-
-            float newSize = Size / splits;
-
-            CreateEffects(PositionComp.GetPosition());
-
-            if (newSize <= AsteroidSettings.MinSubChunkSize)
-            {
-                MyPhysicalItemDefinition item = MyDefinitionManager.Static.GetPhysicalItemDefinition(new MyDefinitionId(typeof(MyObjectBuilder_Ore), Type.ToString()));
-                var newObject = MyObjectBuilderSerializer.CreateNewObject(item.Id.TypeId, item.Id.SubtypeId.ToString()) as MyObjectBuilder_PhysicalObject;
-                for (int i = 0; i < splits; i++)
-                {
-                    int dropAmount = GetRandomDropAmount(Type);
-                    MyFloatingObjects.Spawn(new MyPhysicalInventoryItem(dropAmount, newObject), PositionComp.GetPosition() + RandVector() * Size, Vector3D.Forward, Vector3D.Up, Physics);
-                }
-
-                var removalMessage = new AsteroidNetworkMessage(PositionComp.GetPosition(), Size, Vector3D.Zero, Vector3D.Zero, Type, false, EntityId, true, false, Quaternion.Identity);
-                var removalMessageBytes = MyAPIGateway.Utilities.SerializeToBinary(removalMessage);
-                MyAPIGateway.Multiplayer.SendMessageToOthers(32000, removalMessageBytes);
-
-                MainSession.I._spawner._asteroids.Remove(this);
-                Close();
-                return;
+        private string SelectModelForAsteroidType(AsteroidType type) {
+            // Select model based on asteroid type (same as before, refactor for clarity)
+            string modPath = MainSession.I.ModContext.ModPath;
+            switch (type) {
+                case AsteroidType.Ice:
+                    return GetRandomModel(IceAsteroidModels, modPath);
+                case AsteroidType.Stone:
+                    return GetRandomModel(StoneAsteroidModels, modPath);
+                case AsteroidType.Iron:
+                    return GetRandomModel(IronAsteroidModels, modPath);
+                case AsteroidType.Nickel:
+                    return GetRandomModel(NickelAsteroidModels, modPath);
+                case AsteroidType.Cobalt:
+                    return GetRandomModel(CobaltAsteroidModels, modPath);
+                case AsteroidType.Magnesium:
+                    return GetRandomModel(MagnesiumAsteroidModels, modPath);
+                case AsteroidType.Silicon:
+                    return GetRandomModel(SiliconAsteroidModels, modPath);
+                case AsteroidType.Silver:
+                    return GetRandomModel(SilverAsteroidModels, modPath);
+                case AsteroidType.Gold:
+                    return GetRandomModel(GoldAsteroidModels, modPath);
+                case AsteroidType.Platinum:
+                    return GetRandomModel(PlatinumAsteroidModels, modPath);
+                case AsteroidType.Uraninite:
+                    return GetRandomModel(UraniniteAsteroidModels, modPath);
+                default:
+                    Log.Info("Invalid AsteroidType, no model selected.");
+                    return string.Empty;
             }
-
-            for (int i = 0; i < splits; i++)
-            {
-                Vector3D newPos = PositionComp.GetPosition() + RandVector() * Size;
-                Vector3D newVelocity = RandVector() * AsteroidSettings.GetRandomSubChunkVelocity(MainSession.I.Rand);
-                Vector3D newAngularVelocity = RandVector() * AsteroidSettings.GetRandomSubChunkAngularVelocity(MainSession.I.Rand);
-                Quaternion newRotation = Quaternion.CreateFromYawPitchRoll(
-                    (float)MainSession.I.Rand.NextDouble() * MathHelper.TwoPi,
-                    (float)MainSession.I.Rand.NextDouble() * MathHelper.TwoPi,
-                    (float)MainSession.I.Rand.NextDouble() * MathHelper.TwoPi);
-
-                var subChunk = CreateAsteroid(newPos, newSize, newVelocity, Type, newRotation);
-                subChunk.Physics.AngularVelocity = newAngularVelocity;
-
-                MainSession.I._spawner._asteroids.Add(subChunk);
-
-                var message = new AsteroidNetworkMessage(newPos, newSize, newVelocity, newAngularVelocity, Type, true, subChunk.EntityId, false, true, newRotation);
-                var messageBytes = MyAPIGateway.Utilities.SerializeToBinary(message);
-                MyAPIGateway.Multiplayer.SendMessageToOthers(32000, messageBytes);
-            }
-
-            var finalRemovalMessage = new AsteroidNetworkMessage(PositionComp.GetPosition(), Size, Vector3D.Zero, Vector3D.Zero, Type, false, EntityId, true, false, Quaternion.Identity);
-            var finalRemovalMessageBytes = MyAPIGateway.Utilities.SerializeToBinary(finalRemovalMessage);
-            MyAPIGateway.Multiplayer.SendMessageToOthers(32000, finalRemovalMessageBytes);
-
-            MainSession.I._spawner._asteroids.Remove(this);
-            Close();
         }
 
-        private int GetRandomDropAmount(AsteroidType type)
-        {
-            switch (type)
-            {
-                case AsteroidType.Ice:
-                    return MainSession.I.Rand.Next(AsteroidSettings.IceDropRange[0], AsteroidSettings.IceDropRange[1]);
-                case AsteroidType.Stone:
-                    return MainSession.I.Rand.Next(AsteroidSettings.StoneDropRange[0], AsteroidSettings.StoneDropRange[1]);
-                case AsteroidType.Iron:
-                    return MainSession.I.Rand.Next(AsteroidSettings.IronDropRange[0], AsteroidSettings.IronDropRange[1]);
-                case AsteroidType.Nickel:
-                    return MainSession.I.Rand.Next(AsteroidSettings.NickelDropRange[0], AsteroidSettings.NickelDropRange[1]);
-                case AsteroidType.Cobalt:
-                    return MainSession.I.Rand.Next(AsteroidSettings.CobaltDropRange[0], AsteroidSettings.CobaltDropRange[1]);
-                case AsteroidType.Magnesium:
-                    return MainSession.I.Rand.Next(AsteroidSettings.MagnesiumDropRange[0], AsteroidSettings.MagnesiumDropRange[1]);
-                case AsteroidType.Silicon:
-                    return MainSession.I.Rand.Next(AsteroidSettings.SiliconDropRange[0], AsteroidSettings.SiliconDropRange[1]);
-                case AsteroidType.Silver:
-                    return MainSession.I.Rand.Next(AsteroidSettings.SilverDropRange[0], AsteroidSettings.SilverDropRange[1]);
-                case AsteroidType.Gold:
-                    return MainSession.I.Rand.Next(AsteroidSettings.GoldDropRange[0], AsteroidSettings.GoldDropRange[1]);
-                case AsteroidType.Platinum:
-                    return MainSession.I.Rand.Next(AsteroidSettings.PlatinumDropRange[0], AsteroidSettings.PlatinumDropRange[1]);
-                case AsteroidType.Uraninite:
-                    return MainSession.I.Rand.Next(AsteroidSettings.UraniniteDropRange[0], AsteroidSettings.UraniniteDropRange[1]);
-                default:
-                    return 0;
+        private string GetRandomModel(string[] models, string modPath) {
+            if (models.Length == 0) {
+                Log.Info("Model array is empty");
+                return string.Empty;
             }
+
+            int modelIndex = MainSession.I.Rand.Next(models.Length);
+            Log.Info($"Selected model index: {modelIndex}");
+            return Path.Combine(modPath, models[modelIndex]);
+        }
+
+        public void DrawDebugSphere() {
+            Vector3D asteroidPosition = this.PositionComp.GetPosition();
+            float radius = Properties.Radius;
+            Color sphereColor = Color.Red;
+            Color otherColor = Color.Yellow;
+
+            // Draw the physics radius
+            MatrixD worldMatrix = MatrixD.CreateTranslation(asteroidPosition);
+            MySimpleObjectDraw.DrawTransparentSphere(ref worldMatrix, radius, ref sphereColor,
+                MySimpleObjectRasterizer.Wireframe, 20);
+
+            // Optionally draw the entity's bounding box for comparison
+            BoundingBoxD localBox = PositionComp.LocalAABB;
+            MatrixD boxWorldMatrix = WorldMatrix;
+            MySimpleObjectDraw.DrawTransparentBox(ref boxWorldMatrix, ref localBox,
+                ref otherColor, MySimpleObjectRasterizer.Wireframe, 1, 0.1f);
         }
 
         public void OnDestroy()
         {
-            try
+            if (!MyAPIGateway.Session.IsServer) return;
+
+            Vector3D finalPosition = PositionComp.GetPosition(); // Get position before cleanup
+
+            // Play destruction effects (server-side is fine, clients might need synced effects)
+            MyVisualScriptLogicProvider.CreateParticleEffectAtPosition("roidbreakparticle1", finalPosition);
+            MyVisualScriptLogicProvider.PlaySingleSoundAtPosition("roidbreak", finalPosition);
+
+            // Spawn remaining mass as floating objects
+            var damageHandler = new AsteroidDamageHandler();
+            damageHandler.SpawnDebrisAtImpact(this, finalPosition, Properties.Mass);
+
+            // --- Targeted Network Message ---
+            var finalRemovalMessage = new AsteroidNetworkMessage(
+                finalPosition,
+                Properties.Diameter,
+                Vector3D.Zero, // Velocity doesn't matter for removal
+                Vector3D.Zero, // Angular velocity doesn't matter
+                Type,
+                false,
+                EntityId,
+                true,  // Mark as removal
+                false, // Not initial creation
+                Quaternion.Identity // Rotation doesn't matter
+            );
+
+            byte[] finalRemovalMessageBytes = MyAPIGateway.Utilities.SerializeToBinary(finalRemovalMessage);
+
+            if (finalRemovalMessageBytes != null && finalRemovalMessageBytes.Length > 0)
             {
-                SplitAsteroid();
+                List<IMyPlayer> players = new List<IMyPlayer>();
+                MyAPIGateway.Players.GetPlayers(players);
+
+                foreach (IMyPlayer player in players)
+                {
+                     if (player.SteamUserId == MyAPIGateway.Multiplayer.ServerId) continue; // Don't send to self if host
+
+                     Vector3D playerPosition = player.GetPosition();
+                     // Use the same relevance distance as updates
+                     if (Vector3D.DistanceSquared(finalPosition, playerPosition) <= AsteroidSpawner.ASTEROID_UPDATE_RELEVANCE_DISTANCE * AsteroidSpawner.ASTEROID_UPDATE_RELEVANCE_DISTANCE)
+                     {
+                         MyAPIGateway.Multiplayer.SendMessageTo(32000, finalRemovalMessageBytes, player.SteamUserId);
+                     }
+                }
+                 Log.Info($"Sent targeted final removal message for asteroid {EntityId}");
             }
-            catch (Exception ex)
+            // --- End Targeted Network Message ---
+
+
+            // Remove from spawner and entities (server-side)
+            if (MainSession.I?._spawner != null)
             {
-                Log.Exception(ex, typeof(AsteroidEntity), "Exception in OnDestroy:");
-                throw; // Rethrow the exception for the debugger
+                // Need to ensure TryRemoveAsteroid exists and works correctly or use the modified RemoveAsteroid
+                 MainSession.I._spawner.TryRemoveAsteroid(this); // Or call the modified RemoveAsteroid if needed
             }
+
+             // Use MarkForClose to ensure proper cleanup sequence if needed, otherwise remove directly.
+             // MyEntities.Remove(this); // Direct removal
+             Close(); // Ensure entity closes properly
         }
 
-        public bool DoDamage(float damage, MyStringHash damageSource, bool sync, MyHitInfo? hitInfo = null, long attackerId = 0, long realHitEntityId = 0, bool shouldDetonateAmmo = true, MyStringHash? extraInfo = null)
-        {
-            //Disabling explosion damage is an awful way to fix this weird rocket bug, but it's okay we'll be using weaponcore :)
-            var explosionDamageType = MyStringHash.GetOrCompute("Explosion");
+        public bool DoDamage(float damage, MyStringHash damageSource, bool sync, MyHitInfo? hitInfo = null,
+            long attackerId = 0, long realHitEntityId = 0, bool shouldDetonateAmmo = true,
+            MyStringHash? extraInfo = null) {
+            Log.Info(
+                $"DoDamage called with damage: {damage}, damageSource: {damageSource}, " +
+                $"integrity before damage: {Properties.CurrentIntegrity}");
 
-            // Check if the damage source is explosion
-            if (damageSource == explosionDamageType)
-            {
-                Log.Info($"Ignoring explosion damage for asteroid. Damage source: {damageSource.String}");
-                return false; // Ignore the damage
-            }
-
-            _integrity -= damage;
-            Log.Info($"DoDamage called with damage: {damage}, damageSource: {damageSource.String}, attackerId: {attackerId}, realHitEntityId: {realHitEntityId}, new integrity: {_integrity}");
-
-            if (hitInfo.HasValue)
-            {
-                var hit = hitInfo.Value;
-                Log.Info($"HitInfo - Position: {hit.Position}, Normal: {hit.Normal}, Velocity: {hit.Velocity}");
-            }
-
-            if (Integrity < 0)
-            {
-                Log.Info("Integrity below 0, calling OnDestroy");
-                OnDestroy();
-            }
-            return true;
+            var damageHandler = new AsteroidDamageHandler();
+            return damageHandler.DoDamage(this, damage, damageSource, sync, hitInfo, attackerId, realHitEntityId,
+                shouldDetonateAmmo, extraInfo);
         }
 
-        public float Integrity => _integrity;
+        public void CreatePhysics() {
+            try {
+                if (Physics != null) {
+                    Physics.Close();
+                    Physics = null;
+                }
 
-        public bool UseDamageSystem => true;
+                Log.Info($"Creating physics for asteroid {EntityId}:" +
+                         $"\n - Mass: {Properties.Mass:N0}kg" +
+                         $"\n - Volume: {Properties.Volume:N0}m³" +
+                         $"\n - Radius: {Properties.Radius:F2}m");
 
-        private void CreatePhysics()
-        {
-            float radius = Size / 2; // Assuming Size represents the diameter
-            float volume = 4.0f / 3.0f * (float)Math.PI * (radius * radius * radius);
-            float density = 917.0f; // Density of ice in kg/m³
-            float mass = density * volume;
+                PhysicsSettings settings = MyAPIGateway.Physics.CreateSettingsForPhysics(
+                    this,
+                    MatrixD.CreateTranslation(this.PositionComp.GetPosition()),
+                    Vector3.Zero,
+                    linearDamping: 0f,
+                    angularDamping: 0.01f,
+                    rigidBodyFlags: RigidBodyFlag.RBF_DEFAULT,
+                    collisionLayer: CollisionLayers.NoVoxelCollisionLayer,
+                    isPhantom: false,
+                    mass: new ModAPIMass(Properties.Volume, Properties.Mass, Vector3.Zero,
+                        Properties.Mass * Matrix.Identity)
+                );
 
-            PhysicsSettings settings = MyAPIGateway.Physics.CreateSettingsForPhysics(
-                this,
-                WorldMatrix,
-                Vector3.Zero,
-                linearDamping: 0f,
-                angularDamping: 0f,
-                rigidBodyFlags: RigidBodyFlag.RBF_DEFAULT,
-                collisionLayer: CollisionLayers.NoVoxelCollisionLayer,
-                isPhantom: false,
-                mass: new ModAPIMass(volume, mass, Vector3.Zero, mass * PositionComp.LocalAABB.Height * PositionComp.LocalAABB.Height / 6 * Matrix.Identity));
+                MyAPIGateway.Physics.CreateSpherePhysics(settings, Properties.Radius);
 
-            MyAPIGateway.Physics.CreateSpherePhysics(settings, radius);
-            Physics.Enabled = true;
-            Physics.Activate();
+                if (MyAPIGateway.Session.IsServer) {
+                    const float initialMaxSpin = 0.2f;
+                    Vector3D randomSpin = RandVector() * initialMaxSpin;
+                    this.Physics.AngularVelocity = randomSpin;
+                    Log.Info($"Server: Set initial spin for asteroid {EntityId}: {randomSpin}");
+                }
+            }
+            catch (Exception ex) {
+                Log.Exception(ex, typeof(AsteroidEntity), $"Error creating physics for asteroid {EntityId}");
+            }
         }
-
-        private Vector3D RandVector()
-        {
+        private static Vector3D RandVector() {
             var theta = MainSession.I.Rand.NextDouble() * 2.0 * Math.PI;
             var phi = Math.Acos(2.0 * MainSession.I.Rand.NextDouble() - 1.0);
             var sinPhi = Math.Sin(phi);
-            return Math.Pow(MainSession.I.Rand.NextDouble(), 1 / 3d) * new Vector3D(sinPhi * Math.Cos(theta), sinPhi * Math.Sin(theta), Math.Cos(phi));
+            return Math.Pow(MainSession.I.Rand.NextDouble(), 1 / 3d) *
+                   new Vector3D(sinPhi * Math.Cos(theta), sinPhi * Math.Sin(theta), Math.Cos(phi));
         }
-
     }
 }

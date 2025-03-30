@@ -99,49 +99,49 @@ namespace MIG.SpecCores
         {
             try
             {
-                MyAPIGateway.TerminalControls.CreateCheckbox<ILimitedBlock, Z>("SpecCores_AutoEnable", 
-                    T.Translation(T.GUI_AutoEnable), 
-                    T.Translation(T.GUI_AutoEnableToolTip), 
-					(block) =>
-                    {
-                        var s = block?.Component?.Settings;
-                        if (s == null) return false;
-                        return s.AutoEnable;
-                    },
-                    (block, val) =>
-                    {
-                        block.Component.Settings.AutoEnable = val;
-                        block.Component.NotifyAndSave();
-                    }, 
-                    (x)=>x.GetLimitedBlock(),
-                    visible: (x) =>
-                    {
-                        var s = x?.Component?.Settings;
-                        if (s == null) return false;
-                        return s.AutoEnableShowGUI || s.AutoEnable;
-                    });
+                // MyAPIGateway.TerminalControls.CreateCheckbox<ILimitedBlock, Z>("", 
+                //     T.Translation(T.GUI_AutoEnable), 
+                //     T.Translation(T.GUI_AutoEnableToolTip), 
+				// 	(block) =>
+                //     {
+                //         var s = block?.Component?.Settings;
+                //         if (s == null) return false;
+                //         return s.AutoEnable;
+                //     },
+                //     (block, val) =>
+                //     {
+                //         block.Component.Settings.AutoEnable = val;
+                //         block.Component.NotifyAndSave();
+                //     }, 
+                //     // (x)=>x.GetLimitedBlock(),
+                //     visible: (x) =>
+                //     {
+                //         var s = x?.Component?.Settings;
+                //         if (s == null) return false;
+                //         return s.AutoEnableShowGUI || s.AutoEnable;
+                //     });
             
-                MyAPIGateway.TerminalControls.CreateCheckbox<ILimitedBlock, Z>("SpecCores_SmartAutoEnable", 
-                    T.Translation(T.GUI_SmartAutoEnable), 
-                    T.Translation(T.GUI_SmartAutoEnableToolTip), 
-					(block) =>
-                    {
-                        var s = block?.Component?.Settings;
-                        if (s == null) return false;
-                        return s.SmartTurnOn;
-                    },
-                    (block, val) =>
-                    {
-                        block.Component.Settings.SmartTurnOn = val;
-                        block.Component.NotifyAndSave();
-                    }, 
-                    (x)=>x.GetLimitedBlock(),
-                    visible: (x) =>
-                    {
-                        var s = x?.Component?.Settings;
-                        if (s == null) return false;
-                        return s.SmartTurnOnShowGUI || s.SmartTurnOn;
-                    });
+                // MyAPIGateway.TerminalControls.CreateCheckbox<ILimitedBlock, Z>("", 
+                //     T.Translation(T.GUI_SmartAutoEnable), 
+                //     T.Translation(T.GUI_SmartAutoEnableToolTip), 
+				// 	(block) =>
+                //     {
+                //         var s = block?.Component?.Settings;
+                //         if (s == null) return false;
+                //         return s.SmartTurnOn;
+                //     },
+                //     (block, val) =>
+                //     {
+                //         block.Component.Settings.SmartTurnOn = val;
+                //         block.Component.NotifyAndSave();
+                //     }, 
+                //     (x)=>x.GetLimitedBlock(),
+                //     visible: (x) =>
+                //     {
+                //         var s = x?.Component?.Settings;
+                //         if (s == null) return false;
+                //         return s.SmartTurnOnShowGUI || s.SmartTurnOn;
+                //     });
             }
             catch (Exception e)
             {

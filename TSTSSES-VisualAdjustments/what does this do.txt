@@ -1,0 +1,1 @@
+this mod edits a bunch of keen particle .sbcs and the environment .sbc to fix issues with shadow "zebra striping" and the default vanilla particles.

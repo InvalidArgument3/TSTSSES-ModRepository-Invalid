@@ -1,0 +1,363 @@
+<?xml version="1.0"?>
+<Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <VoxelMaterials>
+    
+	<!--EnceladusSnow01-->	
+	<VoxelMaterial xsi:type="MyObjectBuilder_Dx11VoxelMaterialDefinition">	<!--just alien snow, but with rocks-->
+      <Id>
+        <TypeId>VoxelMaterialDefinition</TypeId>
+        <SubtypeId>EnceladusSnow01</SubtypeId>
+      </Id>
+	  <SpawnsInAsteroids>false</SpawnsInAsteroids>
+      <SpawnsFromMeteorites>false</SpawnsFromMeteorites>
+      <MaterialTypeName>Snow</MaterialTypeName>
+      <MinedOre>Ice</MinedOre>
+      <MinedOreRatio>2</MinedOreRatio>
+      <CanBeHarvested>true</CanBeHarvested>
+      <IsRare>false</IsRare>
+      
+      <VoxelHandPreview>Textures\Voxels\Snow_01_Thumbnail.dds</VoxelHandPreview>
+      <ColorMetalXZnY>Textures\Voxels\Enceladus\EnceladusSnow_cm.dds</ColorMetalXZnY>
+      <NormalGlossXZnY>Textures\Voxels\AlienSnow_Far1_ng.dds</NormalGlossXZnY>
+      <ExtXZnY>Textures\Voxels\Dummy_add.dds</ExtXZnY>
+      
+      <!--Far1 Texture-->
+      <ColorMetalXZnYFar1>Textures\Voxels\Enceladus\EnceladusSnow_cm.dds</ColorMetalXZnYFar1>
+      <NormalGlossXZnYFar1>Textures\Voxels\AlienSnow_Far1_ng.dds</NormalGlossXZnYFar1>
+      <ExtXZnYFar1>Textures\Voxels\Dummy_add.dds</ExtXZnYFar1>
+
+      <!--Far2 Texture-->
+      <ColorMetalXZnYFar2>Textures\Voxels\Enceladus\EnceladusSnow_cm.dds</ColorMetalXZnYFar2>
+      <NormalGlossXZnYFar2>Textures\Voxels\AlienSnow_Far2_ng.dds</NormalGlossXZnYFar2>
+      <ExtXZnYFar2>Textures\Voxels\Dummy_add.dds</ExtXZnYFar2>
+
+      <ExtDetailScale>0.005</ExtDetailScale>
+      <Scale>500</Scale>
+      <Far1Distance>50</Far1Distance>
+      <Far2Distance>500</Far2Distance>
+      <Far1Scale>300</Far1Scale>
+      <Far2Scale>2000</Far2Scale>
+
+      <Far3Distance>6000</Far3Distance>
+      <Far3Color>
+        <X>0.63</X>
+        <Y>0.63</Y>
+        <Z>0.73</Z>
+        <W>1.0</W>
+      </Far3Color>
+	  
+	  
+      <FoliageColorTextureArray>
+		<Color>Textures\Voxels\Snow_01_ForAxisXZ_cm.dds</Color>
+		<Color>Textures\Voxels\Enceladus\Enceladus_Ice_02_cm.dds</Color>
+      </FoliageColorTextureArray>
+      <FoliageNormalTextureArray>
+		<Normal>Textures\Voxels\Snow_01_ForAxisXZ_ng.dds</Normal>
+		<Normal>Textures\Voxels\IceEuropa_ng.dds</Normal>
+      </FoliageNormalTextureArray>
+      <FoliageDensity>0.6</FoliageDensity>
+      <FoliageScale>
+        <X>1</X>
+        <Y>2</Y>
+      </FoliageScale>
+      <FoliageRandomRescaleMult>2.2</FoliageRandomRescaleMult>
+      <FoliageType>1</FoliageType>
+      
+
+      <Friction>0.65</Friction>
+      <Restitution>0.15</Restitution>
+      <ColorKey Hex="#FFFFFF"/>
+    </VoxelMaterial>
+	
+	<!--EnceladusSnow02-->
+	<VoxelMaterial xsi:type="MyObjectBuilder_Dx11VoxelMaterialDefinition">	<!--just normal snow, but with ice grass-->
+      <Id>
+        <TypeId>VoxelMaterialDefinition</TypeId>
+        <SubtypeId>EnceladusSnow02</SubtypeId>
+      </Id>
+	  <SpawnsInAsteroids>false</SpawnsInAsteroids>
+      <SpawnsFromMeteorites>false</SpawnsFromMeteorites>
+      <MaterialTypeName>Snow</MaterialTypeName>
+      <MinedOre>Ice</MinedOre>
+      <MinedOreRatio>2</MinedOreRatio>
+      <CanBeHarvested>true</CanBeHarvested>
+      <IsRare>false</IsRare>
+      
+      <VoxelHandPreview>Textures\Voxels\Snow_01_Thumbnail.dds</VoxelHandPreview>
+      <ColorMetalXZnY>Textures\Voxels\Snow_01_ForAxisXZ_cm.dds</ColorMetalXZnY>
+      <NormalGlossXZnY>Textures\Voxels\Snow_01_ForAxisXZ_ng.dds</NormalGlossXZnY>
+      <ExtXZnY>Textures\Voxels\Dummy_add.dds</ExtXZnY>
+      
+      <!--Far1 Texture-->
+      <ColorMetalXZnYFar1>Textures\Voxels\Snow_01_Far1_cm.dds</ColorMetalXZnYFar1>
+      <NormalGlossXZnYFar1>Textures\Voxels\Snow_01_Far1_ng.dds</NormalGlossXZnYFar1>
+      <ExtXZnYFar1>Textures\Voxels\Dummy_add.dds</ExtXZnYFar1>
+
+      <!--Far2 Texture-->
+      <ColorMetalXZnYFar2>Textures\Voxels\Snow_01_Far2_cm.dds</ColorMetalXZnYFar2>
+      <NormalGlossXZnYFar2>Textures\Voxels\Snow_01_Far2_ng.dds</NormalGlossXZnYFar2>
+      <ExtXZnYFar2>Textures\Voxels\Dummy_add.dds</ExtXZnYFar2>
+
+      <ExtDetailScale>0.005</ExtDetailScale>
+      <Scale>500</Scale>
+      <Far1Distance>50</Far1Distance>
+      <Far2Distance>500</Far2Distance>
+      <Far1Scale>300</Far1Scale>
+      <Far2Scale>2000</Far2Scale>
+      <Far3Distance>6000</Far3Distance>
+      <Far3Color>
+        <X>0.63</X>
+        <Y>0.63</Y>
+        <Z>0.73</Z>
+        <W>1.0</W>
+      </Far3Color>
+	  
+      <Friction>0.85</Friction>
+      <Restitution>0.1</Restitution>
+      <ColorKey Hex="#FFFFFF"/>
+    </VoxelMaterial>
+		
+	<!-- EnceladusIce01 -->
+    <VoxelMaterial xsi:type="MyObjectBuilder_Dx11VoxelMaterialDefinition">	<!--just europa ice, but with spikes-->
+      <Id>
+        <TypeId>VoxelMaterialDefinition</TypeId>
+        <SubtypeId>EnceladusIce01</SubtypeId>
+      </Id>
+      <SpawnsInAsteroids>false</SpawnsInAsteroids>
+      <SpawnsFromMeteorites>false</SpawnsFromMeteorites>
+      <MaterialTypeName>Ice</MaterialTypeName>
+      <MinedOre>Ice</MinedOre>
+      <MinedOreRatio>4</MinedOreRatio>
+      <CanBeHarvested>true</CanBeHarvested>
+      <IsRare>false</IsRare>
+      
+      <VoxelHandPreview>Textures\Voxels\IceEuropa_Thumbnail.dds</VoxelHandPreview>
+      <ColorMetalXZnY>Textures\Voxels\IceEuropa_cm.dds</ColorMetalXZnY>
+      <NormalGlossXZnY>Textures\Voxels\IceEuropa_ng.dds</NormalGlossXZnY>
+      <ExtXZnY>Textures\Voxels\Dummy_add.dds</ExtXZnY>
+      
+
+      <ColorMetalXZnYFar1>Textures\Voxels\IceEuropa_Far1_cm.dds</ColorMetalXZnYFar1>
+      <NormalGlossXZnYFar1>Textures\Voxels\IceEuropa_Far1_ng.dds</NormalGlossXZnYFar1>
+      <ExtXZnYFar1>Textures\Voxels\Dummy_add.dds</ExtXZnYFar1>
+
+      <ColorMetalXZnYFar2>Textures\Voxels\IceEuropa_Far2_cm.dds</ColorMetalXZnYFar2>
+      <NormalGlossXZnYFar2>Textures\Voxels\IceEuropa_Far2_ng.dds</NormalGlossXZnYFar2>
+      <ExtXZnYFar2>Textures\Voxels\Dummy_add.dds</ExtXZnYFar2>
+
+      <SimpleTilingSetup>
+
+        <InitialScale>4</InitialScale>
+        <ScaleMultiplier>8</ScaleMultiplier>
+        <InitialDistance>4</InitialDistance>
+
+        <ExtDetailScale>0.005</ExtDetailScale>
+        <Scale>500</Scale>
+        <Far1Distance>22</Far1Distance>
+        <Far2Distance>500</Far2Distance>
+        <Far1Scale>300</Far1Scale>
+        <Far2Scale>3000</Far2Scale>
+
+        <Far3Distance>50000</Far3Distance>
+      </SimpleTilingSetup>
+
+      <InitialScale>2</InitialScale>
+      <ScaleMultiplier>6</ScaleMultiplier>
+      <InitialDistance>4</InitialDistance>
+      <DistanceMultiplier>2</DistanceMultiplier>
+      <TilingScale>20</TilingScale>
+
+      <ExtDetailScale>0.005</ExtDetailScale>
+      <Scale>500</Scale>
+      <Far1Distance>500</Far1Distance>
+      <Far2Distance>1500</Far2Distance>
+      <Far1Scale>1000</Far1Scale>
+      <Far2Scale>4000</Far2Scale>
+      <Far3Distance>50000</Far3Distance>
+      <Far3Color>
+        <X>0.72</X>
+        <Y>0.94</Y>
+        <Z>1</Z>
+        <W>1.0</W>
+      </Far3Color>
+
+      <FoliageColorTextureArray>
+		<Color>Textures\Voxels\IceEuropa_cm.dds</Color>
+      </FoliageColorTextureArray>
+      <FoliageNormalTextureArray>
+		<Normal>Textures\Voxels\IceEuropa_ng.dds</Normal>
+      </FoliageNormalTextureArray>
+      <FoliageDensity>0.4</FoliageDensity>
+      <FoliageScale>
+        <X>1</X>
+        <Y>50</Y>
+      </FoliageScale>
+      <FoliageRandomRescaleMult>2</FoliageRandomRescaleMult>
+      <FoliageType>1</FoliageType>
+	  
+      
+      <Friction>0.25</Friction>
+      <Restitution>0.3</Restitution>
+
+      <ColorKey Hex="#A4B94D"/>
+    </VoxelMaterial>
+	
+	<!-- EnceladusIce02 -->
+    <VoxelMaterial xsi:type="MyObjectBuilder_Dx11VoxelMaterialDefinition">	<!--custom white ice for steep slopes outside of cracks-->
+      <Id>
+        <TypeId>VoxelMaterialDefinition</TypeId>
+        <SubtypeId>EnceladusIce02</SubtypeId>
+      </Id>
+      <SpawnsInAsteroids>false</SpawnsInAsteroids>
+      <SpawnsFromMeteorites>false</SpawnsFromMeteorites>
+      <MaterialTypeName>Ice</MaterialTypeName>
+      <MinedOre>Ice</MinedOre>
+      <MinedOreRatio>4</MinedOreRatio>
+      <CanBeHarvested>true</CanBeHarvested>
+      <IsRare>false</IsRare>
+      
+      <VoxelHandPreview>Textures\Voxels\IceEuropa_Thumbnail.dds</VoxelHandPreview>
+      <ColorMetalXZnY>Textures\Voxels\Enceladus\Enceladus_Ice_02_cm.dds</ColorMetalXZnY>
+      <NormalGlossXZnY>Textures\Voxels\IceEuropa_ng.dds</NormalGlossXZnY>
+      <ExtXZnY>Textures\Voxels\Dummy_add.dds</ExtXZnY>
+      
+
+      <ColorMetalXZnYFar1>Textures\Voxels\Enceladus\Enceladus_Ice_02_cm.dds</ColorMetalXZnYFar1>
+      <NormalGlossXZnYFar1>Textures\Voxels\IceEuropa_ng.dds</NormalGlossXZnYFar1>
+      <ExtXZnYFar1>Textures\Voxels\Dummy_add.dds</ExtXZnYFar1>
+
+      <ColorMetalXZnYFar2>Textures\Voxels\Enceladus\Enceladus_Ice_02_cm.dds</ColorMetalXZnYFar2>
+      <NormalGlossXZnYFar2>Textures\Voxels\IceEuropa_ng.dds</NormalGlossXZnYFar2>
+      <ExtXZnYFar2>Textures\Voxels\Dummy_add.dds</ExtXZnYFar2>
+
+      <SimpleTilingSetup>
+
+        <InitialScale>4</InitialScale>
+        <ScaleMultiplier>8</ScaleMultiplier>
+        <InitialDistance>4</InitialDistance>
+
+        <ExtDetailScale>0.005</ExtDetailScale>
+        <Scale>500</Scale>
+        <Far1Distance>22</Far1Distance>
+        <Far2Distance>500</Far2Distance>
+        <Far1Scale>300</Far1Scale>
+        <Far2Scale>3000</Far2Scale>
+
+        <Far3Distance>50000</Far3Distance>
+      </SimpleTilingSetup>
+
+      <InitialScale>2</InitialScale>
+      <ScaleMultiplier>6</ScaleMultiplier>
+      <InitialDistance>4</InitialDistance>
+      <DistanceMultiplier>2</DistanceMultiplier>
+      <TilingScale>20</TilingScale>
+
+      <ExtDetailScale>0.005</ExtDetailScale>
+      <Scale>500</Scale>
+      <Far1Distance>500</Far1Distance>
+      <Far2Distance>1500</Far2Distance>
+      <Far1Scale>1000</Far1Scale>
+      <Far2Scale>4000</Far2Scale>
+
+      <Far3Distance>50000</Far3Distance>
+      <Far3Color>
+        <X>0.72</X>
+        <Y>0.94</Y>
+        <Z>1</Z>
+        <W>1.0</W>
+      </Far3Color>
+
+      
+      <Friction>0.4</Friction>
+      <Restitution>0.2</Restitution>
+
+      <ColorKey Hex="#A4B94D"/>
+    </VoxelMaterial>
+
+	<!-- EnceladusIce03 -->
+    <VoxelMaterial xsi:type="MyObjectBuilder_Dx11VoxelMaterialDefinition">	<!--same as EnceladusIce01, but with 10x more spikes for underground-->
+      <Id>
+        <TypeId>VoxelMaterialDefinition</TypeId>
+        <SubtypeId>EnceladusIce03</SubtypeId>
+      </Id>
+      <SpawnsInAsteroids>false</SpawnsInAsteroids>
+      <SpawnsFromMeteorites>false</SpawnsFromMeteorites>
+      <MaterialTypeName>Ice</MaterialTypeName>
+      <MinedOre>Ice</MinedOre>
+      <MinedOreRatio>4</MinedOreRatio>
+      <CanBeHarvested>true</CanBeHarvested>
+      <IsRare>false</IsRare>
+      
+      <VoxelHandPreview>Textures\Voxels\IceEuropa_Thumbnail.dds</VoxelHandPreview>
+      <ColorMetalXZnY>Textures\Voxels\IceEuropa2_cm.dds</ColorMetalXZnY>
+      <NormalGlossXZnY>Textures\Voxels\IceEuropa2_ng.dds</NormalGlossXZnY>
+      <ExtXZnY>Textures\Voxels\Dummy_add.dds</ExtXZnY>
+      
+
+      <ColorMetalXZnYFar1>Textures\Voxels\IceEuropa2_Far1_cm.dds</ColorMetalXZnYFar1>
+      <NormalGlossXZnYFar1>Textures\Voxels\IceEuropa2_Far1_ng.dds</NormalGlossXZnYFar1>
+      <ExtXZnYFar1>Textures\Voxels\Dummy_add.dds</ExtXZnYFar1>
+
+      <ColorMetalXZnYFar2>Textures\Voxels\IceEuropa2_Far2_cm.dds</ColorMetalXZnYFar2>
+      <NormalGlossXZnYFar2>Textures\Voxels\IceEuropa2_Far2_ng.dds</NormalGlossXZnYFar2>
+      <ExtXZnYFar2>Textures\Voxels\Dummy_add.dds</ExtXZnYFar2>
+
+      <SimpleTilingSetup>
+
+        <InitialScale>4</InitialScale>
+        <ScaleMultiplier>8</ScaleMultiplier>
+        <InitialDistance>4</InitialDistance>
+
+        <ExtDetailScale>0.005</ExtDetailScale>
+        <Scale>500</Scale>
+        <Far1Distance>22</Far1Distance>
+        <Far2Distance>500</Far2Distance>
+        <Far1Scale>300</Far1Scale>
+        <Far2Scale>3000</Far2Scale>
+
+        <Far3Distance>50000</Far3Distance>
+      </SimpleTilingSetup>
+
+      <InitialScale>2</InitialScale>
+      <ScaleMultiplier>6</ScaleMultiplier>
+      <InitialDistance>4</InitialDistance>
+      <DistanceMultiplier>2</DistanceMultiplier>
+      <TilingScale>20</TilingScale>
+
+      <ExtDetailScale>0.005</ExtDetailScale>
+      <Scale>500</Scale>
+      <Far1Distance>500</Far1Distance>
+      <Far2Distance>1500</Far2Distance>
+      <Far1Scale>1000</Far1Scale>
+      <Far2Scale>4000</Far2Scale>
+
+      <Far3Distance>50000</Far3Distance>
+      <Far3Color>
+        <X>0.72</X>
+        <Y>0.94</Y>
+        <Z>1</Z>
+        <W>1.0</W>
+      </Far3Color>
+
+      <FoliageColorTextureArray>
+		<Color>Textures\Voxels\IceEuropa_cm.dds</Color>
+      </FoliageColorTextureArray>
+      <FoliageNormalTextureArray>
+		<Normal>Textures\Voxels\IceEuropa_ng.dds</Normal>
+      </FoliageNormalTextureArray>
+      <FoliageDensity>4</FoliageDensity>
+      <FoliageScale>
+        <X>0.5</X>
+        <Y>25</Y>
+      </FoliageScale>
+      <FoliageRandomRescaleMult>2</FoliageRandomRescaleMult>
+      <FoliageType>1</FoliageType>
+      
+      <Friction>0.1</Friction>
+      <Restitution>0.3</Restitution>
+
+      <ColorKey Hex="#A4B94D"/>
+    </VoxelMaterial>
+		
+  </VoxelMaterials>
+</Definitions>

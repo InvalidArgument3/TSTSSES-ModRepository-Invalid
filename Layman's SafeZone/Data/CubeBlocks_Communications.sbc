@@ -17,15 +17,17 @@
       <Model>Models\Cubes\Large\SafeZoneBlock.mwm</Model>
 
       <Components>
-        <Component Subtype="SteelPlate" Count="750" />
-        <Component Subtype="Construction" Count="180" />
-        <Component Subtype="MetalGrid" Count="80" />
-        <Component Subtype="Computer" Count="120" />
-        <Component Subtype="SteelPlate" Count="50" />
+        <Component Subtype="AdminPack" Count="1" >
+          <DeconstructId>
+            <TypeId>Ore</TypeId>
+            <SubtypeId>Scrap</SubtypeId>
+          </DeconstructId>
+        </Component>
+        <Component Subtype="Computer" Count="1" />
       </Components>
 
-      <CriticalComponent Subtype="Computer" Index="0" />
-      
+      <CriticalComponent Subtype="AdminPack" Index="0" />
+
       <MountPoints>
         <MountPoint Side="Bottom" StartX="0" StartY="0.5" EndX="2" EndY="1" />
         <MountPoint Side="Bottom" StartX="0" StartY="1" EndX="2" EndY="2" />
@@ -53,6 +55,6 @@
       <PCU>1</PCU>
       <IsAirTight>false</IsAirTight>
     </Definition>
-    
+
   </CubeBlocks>
 </Definitions>

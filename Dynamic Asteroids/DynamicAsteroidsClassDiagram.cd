@@ -11,7 +11,7 @@
   <Class Name="DynamicAsteroids.Data.Scripts.DynamicAsteroids.AsteroidEntities.AsteroidSettings">
     <Position X="18" Y="0.5" Width="2.75" />
     <TypeIdentifier>
-      <HashCode>DGBCgIMGAIAIAIBmEkEADBWQOtQJQADGlCQ0ACjUAAA=</HashCode>
+      <HashCode>DGBCgIMGAIAIAIBmEkEADBWYOtQJQADGlCQ0ACjUAAA=</HashCode>
       <FileName>Data\Scripts\DynamicAsteroids\AsteroidEntities\AsteroidSettings.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -49,7 +49,7 @@
       </Class>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AQAAAIAAAAAEAEgiqgABgAMQQgAACAAEAgASBgCAIgA=</HashCode>
+      <HashCode>AQAAAIAAAAAEAEgiqgABgAMUQgAACAAEAgASBgCAIgA=</HashCode>
       <FileName>Data\Scripts\DynamicAsteroids\AsteroidSpawner.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -63,7 +63,7 @@
   <Class Name="DynamicAsteroids.Data.Scripts.DynamicAsteroids.MainSession">
     <Position X="9.5" Y="5.25" Width="2" />
     <TypeIdentifier>
-      <HashCode>gAAAAAAAAAAQQAAAgAAAAgICAAQAgIKACAgAACAAAgA=</HashCode>
+      <HashCode>gAAAAEAAAAAQQAAAgACAAgICAAQAgIKACAgAACwACgA=</HashCode>
       <FileName>Data\Scripts\DynamicAsteroids\MainSession.cs</FileName>
     </TypeIdentifier>
   </Class>

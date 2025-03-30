@@ -1,0 +1,32 @@
+<?xml version="1.0"  encoding="utf-8"?>
+<Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <!--MAKE SURE TO CHANGE SECLEANMODCATEGORIES TOO IF YOU'RE ADDING A NEW CATEGORY-->
+  <CategoryClasses>
+    <Category xsi:type="MyObjectBuilder_GuiBlockCategoryDefinition">
+      <Id>
+        <TypeId>GuiBlockCategoryDefinition</TypeId>
+
+      </Id>
+      <DisplayName>EWAR</DisplayName>
+      <Name>Deltav_EWAR</Name>
+      <StrictSearch>true</StrictSearch>
+      <ItemIds>
+        <string>DeltaV_Search_Radar_Large</string>
+        <string>DeltaV_Track_Radar_Large</string>
+        <string>DeltaV_Search_Radar_Small</string>
+        <string>DeltaV_Track_Radar_Small</string>
+        <string>DeltaV_LargeJammer</string>
+        <string>LargeBlockIFFBeacon</string>
+        <string>SmallBlockIFFBeacon</string>
+
+
+
+
+
+      </ItemIds>
+    </Category>
+
+
+    
+  </CategoryClasses>
+</Definitions>

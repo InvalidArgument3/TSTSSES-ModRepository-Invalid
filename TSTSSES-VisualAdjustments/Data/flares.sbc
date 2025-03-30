@@ -1,0 +1,113 @@
+﻿<?xml version="1.0"?>
+<Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Flares>
+    <Definition xsi:type="FlareDefinition">
+      <Id>
+        <TypeId>FlareDefinition</TypeId>
+        <SubtypeId>Sun</SubtypeId>
+      </Id>
+      <Intensity>5</Intensity>
+      <SubGlares>
+		<!--Glow-->
+        <SubGlare>
+          <Type>Rotated</Type>
+          <Material>SunBigGlow</Material>
+          <Color>
+            <X>0.7</X>
+            <Y>0.65</Y>
+            <Z>0.6</Z>
+            <W>1</W>
+          </Color>
+          <Size>
+            <X>20000</X>
+            <Y>20000</Y>
+          </Size>
+          <ScreenIntensityMultiplierCenter>1</ScreenIntensityMultiplierCenter>
+          <ScreenIntensityMultiplierEdge>1</ScreenIntensityMultiplierEdge>
+          <ScreenCenterDistance>
+            <X>0</X>
+            <Y>0</Y>
+          </ScreenCenterDistance>
+        </SubGlare>
+       
+	    <SubGlare>
+          <Type>Rotated</Type>
+          <Material>SunBigGlow</Material>
+          <Color>
+            <X>1</X>
+            <Y>1</Y>
+            <Z>1</Z>
+            <W>1</W>
+          </Color>
+          <Size>
+            <X>9000</X>
+            <Y>9000</Y>
+          </Size>
+          <ScreenIntensityMultiplierCenter>3</ScreenIntensityMultiplierCenter>
+          <ScreenIntensityMultiplierEdge>1</ScreenIntensityMultiplierEdge>
+          <ScreenCenterDistance>
+            <X>0</X>
+            <Y>0</Y>
+          </ScreenCenterDistance>
+        </SubGlare>
+
+		<!--Rays-->
+        <SubGlare>
+          <Type>Oriented</Type>
+          <Material>SunBigRays</Material>
+          <Color>
+            <X>0.95</X>
+            <Y>0.9</Y>
+            <Z>0.85</Z>
+            <W>1</W>
+          </Color>
+          <Size>
+            <X>20000</X>
+            <Y>20000</Y>
+          </Size>
+          <ScreenIntensityMultiplierCenter>1</ScreenIntensityMultiplierCenter>
+          <ScreenIntensityMultiplierEdge>1</ScreenIntensityMultiplierEdge>
+
+          <OcclusionToIntensityCurve>
+            <KeyPoint>
+              <Occlusion>0</Occlusion>
+              <Intensity>1</Intensity>
+            </KeyPoint>
+            <KeyPoint>
+              <Occlusion>0.35</Occlusion>
+              <Intensity>0</Intensity>
+            </KeyPoint>
+          </OcclusionToIntensityCurve>
+          
+          <ScreenCenterDistance>
+            <X>0</X>
+            <Y>0</Y>
+          </ScreenCenterDistance>
+        </SubGlare>
+
+        <SubGlare>
+          <Type>Oriented</Type>
+          <Material>SunBigRays</Material>
+          <Color>
+            <X>0.95</X>
+            <Y>0.9</Y>
+            <Z>0.85</Z>
+            <W>1</W>
+          </Color>
+          <Size>
+            <X>30000</X>
+            <Y>30000</Y>
+          </Size>
+          <ScreenIntensityMultiplierCenter>1</ScreenIntensityMultiplierCenter>
+          <ScreenIntensityMultiplierEdge>1</ScreenIntensityMultiplierEdge>
+     
+          <ScreenCenterDistance>
+            <X>0</X>
+            <Y>0</Y>
+          </ScreenCenterDistance>
+        </SubGlare>
+
+      </SubGlares>
+    </Definition>
+  </Flares>
+</Definitions>

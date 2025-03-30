@@ -49,22 +49,22 @@ namespace MIG.SpecCores
                 upgradesListBox.ListContent = UpgradeListContentGui;
                 MyAPIGateway.TerminalControls.AddControl<Z>(upgradesListBox);
                 
-                MyAPIGateway.TerminalControls.CreateButton<SpecBlock, Z>("AddUpgrade",  T.Translation(T.Button_AddUpgrade),  T.Translation(T.Button_AddUpgrade_Tooltip), 
-                    AddUpgradeGui, 
-                    Sugar2.GetUpgradableSpecBlock, 
-                    enabled: AddUpgrade_Enabled, 
-                    visible: UpgradeGui_IsVisible);
+                // MyAPIGateway.TerminalControls.CreateButton<SpecBlock, Z>("AddUpgrade",  T.Translation(T.Button_AddUpgrade),  T.Translation(T.Button_AddUpgrade_Tooltip), 
+                //     AddUpgradeGui, 
+                //     Sugar2.GetUpgradableSpecBlock, 
+                //     enabled: AddUpgrade_Enabled, 
+                //     visible: UpgradeGui_IsVisible);
 
-                MyAPIGateway.TerminalControls.CreateButton<SpecBlock, Z>("RemoveUpgrade",  T.Translation(T.Button_RemoveUpgrade),  T.Translation(T.Button_RemoveUpgrade_Tooltip), 
-                    RemoveUpgradeGui, 
-                    Sugar2.GetUpgradableSpecBlock, 
-                    visible: UpgradeGui_IsVisible);
+                // MyAPIGateway.TerminalControls.CreateButton<SpecBlock, Z>("RemoveUpgrade",  T.Translation(T.Button_RemoveUpgrade),  T.Translation(T.Button_RemoveUpgrade_Tooltip), 
+                //     RemoveUpgradeGui, 
+                //     Sugar2.GetUpgradableSpecBlock, 
+                //     visible: UpgradeGui_IsVisible);
 
-                MyAPIGateway.TerminalControls.CreateButton<SpecBlock, Z>("ApplyUpgrades", T.Translation(T.Button_ApplyUpgrade), T.Translation(T.Button_ApplyUpgrade_Tooltip), 
-                    ApplyUpgradesGui, 
-                    Sugar2.GetUpgradableSpecBlock, 
-                    enabled: ApplyUpgrades_Enabled, 
-                    visible: UpgradeGui_IsVisible).DoubleClick();
+                // MyAPIGateway.TerminalControls.CreateButton<SpecBlock, Z>("ApplyUpgrades", T.Translation(T.Button_ApplyUpgrade), T.Translation(T.Button_ApplyUpgrade_Tooltip), 
+                //     ApplyUpgradesGui, 
+                //     Sugar2.GetUpgradableSpecBlock, 
+                //     enabled: ApplyUpgrades_Enabled, 
+                //     visible: UpgradeGui_IsVisible).DoubleClick();
                 
                 //MyAPIGateway.TerminalControls.CreateButton<SpecBlock, Z>("ApplyRandomUpgrades", 
                 //    T.Translation(T.Button_ApplyRandomUpgrade), 

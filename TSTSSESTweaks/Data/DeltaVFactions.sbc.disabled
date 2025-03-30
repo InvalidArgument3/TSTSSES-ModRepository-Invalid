@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <Factions>
+
+        <Faction Tag="ADM" Founder="John Admin">
+            <Id>
+                <TypeId>MyObjectBuilder_FactionDefinition</TypeId>
+                <SubtypeId>ADM</SubtypeId>
+            </Id>
+            <DisplayName>ADMIN</DisplayName>
+            <IsDefault>true</IsDefault>
+            <StartingBalance>1000000000</StartingBalance>
+            <Type>Trader</Type>
+            <AcceptHumans>true</AcceptHumans>
+            <AutoAcceptMember>false</AutoAcceptMember>
+            <AutoAcceptPeace>false</AutoAcceptPeace>
+            <DiscoveredByDefault>true</DiscoveredByDefault>
+            <DefaultRelation>Friends</DefaultRelation>
+            <Description>Admin</Description>
+        </Faction>
+
+      <Faction Tag="ECO" Founder="John CEO">
+        <Id>
+          <TypeId>MyObjectBuilder_FactionDefinition</TypeId>
+          <SubtypeId>ECO</SubtypeId>
+        </Id>
+        <DisplayName>Enceladus Corporation</DisplayName>
+        <IsDefault>true</IsDefault>
+        <StartingBalance>1</StartingBalance>
+        <Type>None</Type>
+        <AcceptHumans>true</AcceptHumans>
+        <AutoAcceptMember>false</AutoAcceptMember>
+        <AutoAcceptPeace>false</AutoAcceptPeace>
+        <DiscoveredByDefault>true</DiscoveredByDefault>
+        <DefaultRelation>Neutral</DefaultRelation>
+        <Description>ECO</Description>
+      </Faction>
+
+      <Faction Tag="GLF" Founder="John Revolutionary">
+        <Id>
+          <TypeId>MyObjectBuilder_FactionDefinition</TypeId>
+          <SubtypeId>GLF</SubtypeId>
+        </Id>
+        <DisplayName>Ganymede Liberation Front</DisplayName>
+        <IsDefault>true</IsDefault>
+        <StartingBalance>1</StartingBalance>
+        <Type>None</Type>
+        <AcceptHumans>true</AcceptHumans>
+        <AutoAcceptMember>false</AutoAcceptMember>
+        <AutoAcceptPeace>false</AutoAcceptPeace>
+        <DiscoveredByDefault>true</DiscoveredByDefault>
+        <DefaultRelation>Neutral</DefaultRelation>
+        <Description>GLF</Description>
+      </Faction>
+
+    </Factions>
+</Definitions>

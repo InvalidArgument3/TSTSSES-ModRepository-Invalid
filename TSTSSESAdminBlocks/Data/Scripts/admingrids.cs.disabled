@@ -1,0 +1,109 @@
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Sandbox.Common.Components;
+using Sandbox.Game.Gui;
+using Sandbox.Game.GUI;
+using Sandbox.Game.Localization;
+
+using Sandbox.Graphics.GUI;
+
+using VRage.Game.ModAPI;
+using VRage.Game.ModAPI.Ingame;
+using VRage.Game.ModAPI.Interfaces;
+
+
+using System;
+using Sandbox.Game;
+using Sandbox.Game.Entities.Character;
+using Sandbox.Game.Entities.Cube;
+using Sandbox.Game.Multiplayer;
+
+using Sandbox.Common;
+using Sandbox.Engine;
+using Sandbox.Engine.Physics;
+using Sandbox.Engine.Utils;
+using Sandbox.Game.Entities;
+using Sandbox.Game.Utils;
+using Sandbox.Game.World;
+using Sandbox.Game.Weapons;
+using VRage.Utils;
+using VRageMath;
+using VRage.Input;
+
+using VRage;
+using Sandbox.Definitions;
+using VRage.Library.Utils;
+using VRage.ModAPI;
+
+
+
+
+using Sandbox.Common;
+using Sandbox.Definitions;
+using Sandbox.Engine.Multiplayer;
+using Sandbox.Engine.Networking;
+using Sandbox.Engine.Utils;
+using Sandbox.Game.Entities;
+using Sandbox.Game.Entities.Blocks;
+using Sandbox.Game.Entities.Cube;
+using Sandbox.Game.Gui;
+using Sandbox.Game.GUI;
+using Sandbox.Game.Localization;
+using Sandbox.Game.Multiplayer;
+using Sandbox.Game.SessionComponents;
+using Sandbox.Game.World;
+using Sandbox.Graphics.GUI;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using VRage;
+using VRage.FileSystem;
+using VRage.Input;
+using VRage.Library.Utils;
+using VRage.Network;
+using VRage.Utils;
+using VRageMath;
+using Sandbox.ModAPI;
+
+
+namespace AdminGrids
+{
+	[MySessionComponentDescriptor(MyUpdateOrder.BeforeSimulation)]
+	class MissionComponent : MySessionComponentBase
+    {
+		
+        private bool m_init = false;
+		
+        public void gridProtection(object target,ref MyDamageInformation damageInfo) {
+			VRage.Game.ModAPI.IMySlimBlock damagedBlock = target as VRage.Game.ModAPI.IMySlimBlock;
+			if(damagedBlock == null) { return; }
+			VRage.Game.ModAPI.IMyCubeGrid damagedGrid = damagedBlock.CubeGrid as VRage.Game.ModAPI.IMyCubeGrid;
+			if(damagedGrid == null) { return; }
+			List<VRage.Game.ModAPI.IMySlimBlock> blocks = new List<VRage.Game.ModAPI.IMySlimBlock>();
+			damagedGrid.GetBlocks(blocks, (x) => x.FatBlock is Sandbox.ModAPI.IMyTerminalBlock && x.FatBlock.BlockDefinition.SubtypeId.Contains("AdminGrid"));
+						
+			if(blocks.Count > 0) {
+			
+								
+				damageInfo.Amount = 0;
+				damageInfo.IsDeformation = false;
+			}
+        }
+		
+		
+		public override void UpdateBeforeSimulation ()
+		{
+			if (!m_init) {
+				Init();
+			}
+		}
+		
+        private void Init() {
+			MyAPIGateway.Session.DamageSystem.RegisterBeforeDamageHandler(0,gridProtection);
+			m_init = true;
+        }
+    }
+}

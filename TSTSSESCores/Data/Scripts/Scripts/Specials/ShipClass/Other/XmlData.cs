@@ -72,7 +72,6 @@ namespace MIG.SpecCores
     {
         None,
         Always,
-        IsPlaced,
         IsFunctional,
         Integrity,
         IsEnabled,

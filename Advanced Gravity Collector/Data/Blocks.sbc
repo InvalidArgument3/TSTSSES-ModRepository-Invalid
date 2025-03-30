@@ -99,6 +99,7 @@
       <MirroringY>Z</MirroringY>
       <MirroringZ>Y</MirroringZ>
       <DamageEffectId>212</DamageEffectId>
+      <PCU>200</PCU>
     </Definition>
   </CubeBlocks>
 </Definitions>

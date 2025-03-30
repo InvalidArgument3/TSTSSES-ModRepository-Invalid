@@ -195,10 +195,10 @@ namespace ServerMod {
                     if (sphere3.Contains(term.WorldMatrix.Translation) == ContainmentType.Contains && !IsSeparated(term)) {
                         var add = true;
                         foreach (var e in enters) {
-                            if (AreConnected(e, term)) {
-                                add = false;
-                                break;
-                            }
+                            // if (AreConnected(e, term)) {
+                            //     add = false;
+                            //     break;
+                            // }
                         }
                         if (add) enters.Add(term);
                     }
@@ -219,11 +219,11 @@ namespace ServerMod {
                     if (cargos.Count >= maxTake) return;
                 } else {
                     foreach (var y in enters) {
-                        if (AreConnected (x, y)) {
-                            cargos.Add (x as MyEntity);
-                            if (cargos.Count >= maxTake) return;
-                            break;
-                        }
+                        // if (AreConnected (x, y)) {
+                        //     cargos.Add (x as MyEntity);
+                        //     if (cargos.Count >= maxTake) return;
+                        //     break;
+                        // }
                     }
                 }
             }
@@ -270,20 +270,20 @@ namespace ServerMod {
             return false;
         }
 
-        private static bool AreConnected (IMyTerminalBlock a, IMyTerminalBlock b) {
-            //if (a.CubeGrid != b.CubeGrid) return false;
-            if (a==b) return true;
+        // private static bool AreConnected (IMyTerminalBlock a, IMyTerminalBlock b) {
+        //     //if (a.CubeGrid != b.CubeGrid) return false;
+        //     if (a==b) return true;
 
-            for (var x=0; x < a.InventoryCount; x++) {
-                for (var y=0; y < b.InventoryCount; y++) {
-                    if (a.GetInventory (x).IsConnectedTo (b.GetInventory(y))) {
-                        return true;
-                    }
-                }
-            }
+        //     for (var x=0; x < a.InventoryCount; x++) {
+        //         for (var y=0; y < b.InventoryCount; y++) {
+        //             if (a.GetInventory (x).IsConnectedTo (b.GetInventory(y))) {
+        //                 return true;
+        //             }
+        //         }
+        //     }
 
-            return false;
-        }
+        //     return false;
+        // }
 
 
         public static string CustomName (this IMyInventory x) {

@@ -1,7 +1,6 @@
 ﻿using System;
 using MIG.Shared.SE;
 using Sandbox.Game;
-using Sandbox.Game.Entities;
 using Sandbox.Game.EntityComponents;
 using Sandbox.ModAPI;
 using VRage.Game.ModAPI;
@@ -18,8 +17,7 @@ namespace MIG.SpecCores
             {
                 case ConsumeBehaviorType.Always:
                     return true;
-                case ConsumeBehaviorType.IsPlaced:
-                    return ((MyCubeGrid)block.CubeGrid).GetCubeBlock(block.Min) != null;
+                
                 case ConsumeBehaviorType.IsEnabled:
                     return fblock.Enabled != behavior.Reverse;
                 case ConsumeBehaviorType.IsWorking:

@@ -127,7 +127,7 @@ namespace Scripts.Specials.ShipClass
             Action<object> onLimitedBlockDestroyed = (x) => OnLimitedBlockDestroyed?.Invoke(x);
 
             Action<object, List<IMyCubeGrid>> onSpecBlockChanged = (x,y) => OnSpecBlockChanged?.Invoke(x,y);
-            
+
             ModConnection.SetValue("MIG.SpecCores.OnSpecBlockCreated", onSpecBlockCreated);
             ModConnection.SetValue("MIG.SpecCores.OnLimitedBlockCreated", onSpecBlockDestroyed);
             ModConnection.SetValue("MIG.SpecCores.OnSpecBlockDestroyed", onLimitedBlockCreated);

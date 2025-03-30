@@ -6,11 +6,12 @@
         <TypeId>GuiBlockCategoryDefinition</TypeId>
         <SubtypeId />
       </Id>
-      <DisplayName>DisplayName_Category_LargeBlocks</DisplayName>
-      <Name>LargeBlocks</Name>
+      <DisplayName>DisplayName_Category_Propulsion</DisplayName>
+      <Name>Section1_Position3_Propulsion</Name>
       <StrictSearch>true</StrictSearch>
       <ItemIds>
-        <string>UpgradeModule/FSDriveLarge</string>
+        <string>SlipspaceCoreLarge</string>
+        <string>SlipspaceCoreSmall</string>
       </ItemIds>
     </Category>
     <Category xsi:type="MyObjectBuilder_GuiBlockCategoryDefinition">
@@ -18,11 +19,12 @@
         <TypeId>GuiBlockCategoryDefinition</TypeId>
         <SubtypeId />
       </Id>
-      <DisplayName>DisplayName_Category_SmallBlocks</DisplayName>
-      <Name>SmallBlocks</Name>
+      <DisplayName>Slipspace</DisplayName>
+      <Name>Slipspace</Name>
       <StrictSearch>true</StrictSearch>
       <ItemIds>
-        <string>UpgradeModule/FSDriveSmall</string>
+        <string>SlipspaceCoreLarge</string>
+        <string>SlipspaceCoreSmall</string>
       </ItemIds>
     </Category>
   </CategoryClasses>

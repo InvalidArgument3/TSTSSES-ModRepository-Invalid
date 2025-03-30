@@ -17,7 +17,7 @@ using IMyTextSurface = Sandbox.ModAPI.Ingame.IMyTextSurface;
 namespace MIG.SpecCores
 {   
 
-    [MyTextSurfaceScriptAttribute("CoreInfoLcd", "Core Info Lcd")]
+    [MyTextSurfaceScriptAttribute("CoreInfoLcd", "Grid Core Info LCD")]
     public class CoreInfoLcd : MyTSSCommon
     {
 

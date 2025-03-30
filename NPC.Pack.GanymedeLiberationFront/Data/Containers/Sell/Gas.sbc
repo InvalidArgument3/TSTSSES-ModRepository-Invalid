@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <ContainerTypes>
+<!--        planet-->
+        <ContainerType CountMin="2" CountMax="4">
+            <Id>
+                <TypeId>ContainerTypeDefinition</TypeId>
+                <SubtypeId>GasSell</SubtypeId>
+            </Id>
+            <Items>
+                <Item AmountMin="2" AmountMax="25">
+                    <Frequency>1.0</Frequency>
+                    <Id>
+                        <TypeId>GasContainerObject</TypeId>
+                        <SubtypeId>HydrogenBottle</SubtypeId>
+                    </Id>
+                </Item>
+                <Item AmountMin="1" AmountMax="15">
+                    <Frequency>1.0</Frequency>
+                    <Id>
+                        <TypeId>OxygenContainerObject</TypeId>
+                        <SubtypeId>OxygenBottle</SubtypeId>
+                    </Id>
+                </Item>
+                <Item AmountMin="10000" AmountMax="50000">
+                    <Frequency>1.0</Frequency>
+                    <Id>
+                        <TypeId>Ore</TypeId>
+                        <SubtypeId>Ice</SubtypeId>
+                    </Id>
+                </Item>
+            </Items>
+        </ContainerType>
+
+    </ContainerTypes>
+</Definitions>

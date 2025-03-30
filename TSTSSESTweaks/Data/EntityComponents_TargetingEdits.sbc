@@ -1,0 +1,19 @@
+<Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <EntityComponents>
+    <EntityComponent xsi:type="MyObjectBuilder_TargetLockingComponentDefinition">
+      <Id>
+        <TypeId>TargetLockingComponent</TypeId>
+        <SubtypeId>Character</SubtypeId>
+      </Id>
+      <LockingModifierSmallGrid>1</LockingModifierSmallGrid>
+      <LockingModifierLargeGrid>1</LockingModifierLargeGrid>
+      <LockingTimeMin>1</LockingTimeMin>
+      <LockingTimeMax>1</LockingTimeMax>
+      <LockingModifierDistance>1</LockingModifierDistance>
+      <LockingModifierCharacter>1</LockingModifierCharacter>
+      <LockingTimeMinCharacter>1</LockingTimeMinCharacter>
+      <LockingTimeMaxCharacter>1</LockingTimeMaxCharacter>
+      <LockingModifierDistanceCharacter>1</LockingModifierDistanceCharacter>
+    </EntityComponent>
+  </EntityComponents>
+</Definitions>

@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<Weapons>
+		<Weapon>
+			<Id>
+				<TypeId>WeaponDefinition</TypeId>
+				<SubtypeId>Jammer_FakeEntry</SubtypeId>
+			</Id>
+			<ProjectileAmmoData RateOfFire="1" ShootSoundName="null"/>
+			<ReleaseTimeAfterFire>1</ReleaseTimeAfterFire>
+			<NoAmmoSoundName>WepShipGatlingNoAmmo</NoAmmoSoundName>
+			<SecondarySoundName>WepShipGatlingRotation</SecondarySoundName>
+			<DeviateShotAngle>0</DeviateShotAngle>
+			<MuzzleFlashLifeSpan>0</MuzzleFlashLifeSpan>
+			<AmmoMagazines>
+				<AmmoMagazine Subtype="Jammer_FakeEntry"/>
+			</AmmoMagazines>
+		</Weapon>
+	</Weapons>
+	<AmmoMagazines>
+		<AmmoMagazine>
+			<Id>
+				<TypeId>AmmoMagazine</TypeId>
+				<SubtypeId>Jammer_FakeEntry</SubtypeId>
+			</Id>
+			<DisplayName>Jammer_FakeEntry</DisplayName>
+			<Icon>Textures\GUI\Icons\ammo\Rifle_Ammo_SemiAuto.dds</Icon>
+			<Size>
+				<X>0.06</X>
+				<Y>0.20</Y>
+				<Z>0.06</Z>
+			</Size>
+			<Mass>1</Mass>
+			<Volume>1</Volume>
+			<Model>Models\Weapons\Rifle_SemiAuto_Magazine_Warfare.mwm</Model>
+			<PhysicalMaterial>Ammo</PhysicalMaterial>
+			<Capacity>1</Capacity>
+			<IconSymbol>Jammer_FakeEntry</IconSymbol>
+			<AmmoDefinitionId Subtype="Jammer_FakeEntry"/>
+		</AmmoMagazine>
+	</AmmoMagazines>
+	<Ammos>
+		<Ammo xsi:type="MyObjectBuilder_ProjectileAmmoDefinition">
+			<Id>
+				<TypeId>AmmoDefinition</TypeId>
+				<SubtypeId>Jammer_FakeEntry</SubtypeId>
+			</Id>
+			<BasicProperties>
+				<DesiredSpeed>1</DesiredSpeed>
+				<SpeedVariance>0</SpeedVariance>
+				<MaxTrajectory>1</MaxTrajectory>
+				<BackkickForce>1</BackkickForce>
+				<PhysicalMaterial>GunBullet</PhysicalMaterial>
+			</BasicProperties>
+			<ProjectileProperties>
+				<ProjectileCount>1</ProjectileCount>
+				<ProjectileTrailScale>1</ProjectileTrailScale>
+				<ProjectileTrailColor x="0" y="0" z="0"/>
+				<ProjectileHitImpulse>0</ProjectileHitImpulse>
+				<ProjectileMassDamage>0</ProjectileMassDamage>
+				<ProjectileHealthDamage>0</ProjectileHealthDamage>
+				<ProjectileTrailProbability>0</ProjectileTrailProbability>
+			</ProjectileProperties>
+		</Ammo>
+	</Ammos>
+</Definitions>

@@ -634,16 +634,6 @@ namespace MIG.SpecCores
 
         private static void UpdateCachedCore(List<IMyCubeGrid> grids, ISpecBlock specBlock, ref bool changed, ref bool changedCore)
         {
-            if (specBlock != null)
-            {
-                if (specBlock.ValuesChanged)
-                {
-                    changedCore = true;
-                    specBlock.ValuesChanged = false;
-                }
-            }
-            
-            
             foreach (var g in grids)
             {
                 var ship = g.GetShip();

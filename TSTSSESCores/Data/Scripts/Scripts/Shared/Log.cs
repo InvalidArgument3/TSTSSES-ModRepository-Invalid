@@ -9,7 +9,7 @@ namespace Digi {
     public static class Log // v1.4
     {
         public static string modName = "UNNAMED";
-        public static int MAX_LOGS = 500;
+        public static int MAX_LOGS = 0;
         public static int logged = 0;
         public static bool CanWriteToChat = false;
         

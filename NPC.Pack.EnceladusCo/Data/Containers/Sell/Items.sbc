@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+<Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <ContainerTypes>
+
+        <ContainerType CountMin="10" CountMax="20">
+            <Id>
+                <TypeId>ContainerTypeDefinition</TypeId>
+                <SubtypeId>ItemsSell</SubtypeId>
+            </Id>
+            <Items>
+                <Item AmountMin="10" AmountMax="100">
+                    <Frequency>1.0</Frequency>
+                    <Id>
+                        <TypeId>ConsumableItem</TypeId>
+                        <SubtypeId>Medkit</SubtypeId>
+                    </Id>
+                </Item>
+                <Item AmountMin="10" AmountMax="100">
+                    <Frequency>1.0</Frequency>
+                    <Id>
+                        <TypeId>ConsumableItem</TypeId>
+                        <SubtypeId>Powerkit</SubtypeId>
+                    </Id>
+                </Item>
+                <Item AmountMin="10" AmountMax="100">
+                    <Frequency>1.0</Frequency>
+                    <Id>
+                        <TypeId>ConsumableItem</TypeId>
+                        <SubtypeId>ClangCola</SubtypeId>
+                    </Id>
+                </Item>
+                <Item AmountMin="10" AmountMax="100">
+                    <Frequency>1.0</Frequency>
+                    <Id>
+                        <TypeId>ConsumableItem</TypeId>
+                        <SubtypeId>CosmicCoffee</SubtypeId>
+                    </Id>
+                </Item>
+                <Item AmountMin="1" AmountMax="5">
+                    <Frequency>1.0</Frequency>
+                    <Id>
+                        <TypeId>PhysicalGunObject</TypeId>
+                        <SubtypeId>Welder2Item</SubtypeId>
+                    </Id>
+                </Item>
+                <Item AmountMin="1" AmountMax="5">
+                    <Frequency>1.0</Frequency>
+                    <Id>
+                        <TypeId>PhysicalGunObject</TypeId>
+                        <SubtypeId>Welder3Item</SubtypeId>
+                    </Id>
+                </Item>
+                <Item AmountMin="1" AmountMax="5">
+                    <Frequency>1.0</Frequency>
+                    <Id>
+                        <TypeId>PhysicalGunObject</TypeId>
+                        <SubtypeId>Welder4Item</SubtypeId>
+                    </Id>
+                </Item>
+                <Item AmountMin="1" AmountMax="5">
+                    <Frequency>1.0</Frequency>
+                    <Id>
+                        <TypeId>PhysicalGunObject</TypeId>
+                        <SubtypeId>AngleGrinder2Item</SubtypeId>
+                    </Id>
+                </Item>
+                <Item AmountMin="1" AmountMax="5">
+                    <Frequency>1.0</Frequency>
+                    <Id>
+                        <TypeId>PhysicalGunObject</TypeId>
+                        <SubtypeId>AngleGrinder3Item</SubtypeId>
+                    </Id>
+                </Item>
+                <Item AmountMin="1" AmountMax="5">
+                    <Frequency>1.0</Frequency>
+                    <Id>
+                        <TypeId>PhysicalGunObject</TypeId>
+                        <SubtypeId>AngleGrinder4Item</SubtypeId>
+                    </Id>
+                </Item>
+                <Item AmountMin="1" AmountMax="5">
+                    <Frequency>1.0</Frequency>
+                    <Id>
+                        <TypeId>PhysicalGunObject</TypeId>
+                        <SubtypeId>HandDrill2Item</SubtypeId>
+                    </Id>
+                </Item>
+                <Item AmountMin="1" AmountMax="5">
+                    <Frequency>1.0</Frequency>
+                    <Id>
+                        <TypeId>PhysicalGunObject</TypeId>
+                        <SubtypeId>HandDrill3Item</SubtypeId>
+                    </Id>
+                </Item>
+                <Item AmountMin="1" AmountMax="5">
+                    <Frequency>1.0</Frequency>
+                    <Id>
+                        <TypeId>PhysicalGunObject</TypeId>
+                        <SubtypeId>HandDrill4Item</SubtypeId>
+                    </Id>
+                </Item>
+                <Item AmountMin="2" AmountMax="20">
+                    <Frequency>2.0</Frequency>
+                    <Id>
+                        <TypeId>Component</TypeId>
+                        <SubtypeId>ZoneChip</SubtypeId>
+                    </Id>
+                </Item>
+            </Items>
+        </ContainerType>
+
+    </ContainerTypes>
+</Definitions>

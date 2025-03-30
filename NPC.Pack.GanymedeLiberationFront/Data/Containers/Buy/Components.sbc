@@ -1,0 +1,162 @@
+<?xml version="1.0"?>
+<Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <ContainerTypes>
+
+        <ContainerType CountMin="3" CountMax="6">
+            <Id>
+                <TypeId>ContainerTypeDefinition</TypeId>
+                <SubtypeId>ComponentsBuy</SubtypeId>
+            </Id>
+            <Items>
+                <Item AmountMin="100" AmountMax="1000">
+                    <Frequency>1.0</Frequency>
+                    <Id>
+                        <TypeId>Component</TypeId>
+                        <SubtypeId>Construction</SubtypeId>
+                    </Id>
+                </Item>
+                <Item AmountMin="100" AmountMax="1000">
+                    <Frequency>1.0</Frequency>
+                    <Id>
+                        <TypeId>Component</TypeId>
+                        <SubtypeId>MetalGrid</SubtypeId>
+                    </Id>
+                </Item>
+                <Item AmountMin="100" AmountMax="1000">
+                    <Frequency>1.0</Frequency>
+                    <Id>
+                        <TypeId>Component</TypeId>
+                        <SubtypeId>InteriorPlate</SubtypeId>
+                    </Id>
+                </Item>
+                <Item AmountMin="100" AmountMax="1000">
+                    <Frequency>1.0</Frequency>
+                    <Id>
+                        <TypeId>Component</TypeId>
+                        <SubtypeId>SteelPlate</SubtypeId>
+                    </Id>
+                </Item>
+                <Item AmountMin="100" AmountMax="1000">
+                    <Frequency>1.0</Frequency>
+                    <Id>
+                        <TypeId>Component</TypeId>
+                        <SubtypeId>Girder</SubtypeId>
+                    </Id>
+                </Item>
+                <Item AmountMin="100" AmountMax="1000">
+                    <Frequency>1.0</Frequency>
+                    <Id>
+                        <TypeId>Component</TypeId>
+                        <SubtypeId>SmallTube</SubtypeId>
+                    </Id>
+                </Item>
+                <Item AmountMin="100" AmountMax="1000">
+                    <Frequency>1.0</Frequency>
+                    <Id>
+                        <TypeId>Component</TypeId>
+                        <SubtypeId>LargeTube</SubtypeId>
+                    </Id>
+                </Item>
+                <Item AmountMin="100" AmountMax="1000">
+                    <Frequency>1.0</Frequency>
+                    <Id>
+                        <TypeId>Component</TypeId>
+                        <SubtypeId>Motor</SubtypeId>
+                    </Id>
+                </Item>
+                <Item AmountMin="100" AmountMax="1000">
+                    <Frequency>1.0</Frequency>
+                    <Id>
+                        <TypeId>Component</TypeId>
+                        <SubtypeId>Display</SubtypeId>
+                    </Id>
+                </Item>
+                <Item AmountMin="100" AmountMax="1000">
+                    <Frequency>1.0</Frequency>
+                    <Id>
+                        <TypeId>Component</TypeId>
+                        <SubtypeId>BulletproofGlass</SubtypeId>
+                    </Id>
+                </Item>
+                <Item AmountMin="100" AmountMax="1000">
+                    <Frequency>1.0</Frequency>
+                    <Id>
+                        <TypeId>Component</TypeId>
+                        <SubtypeId>Superconductor</SubtypeId>
+                    </Id>
+                </Item>
+                <Item AmountMin="100" AmountMax="1000">
+                    <Frequency>1.0</Frequency>
+                    <Id>
+                        <TypeId>Component</TypeId>
+                        <SubtypeId>Computer</SubtypeId>
+                    </Id>
+                </Item>
+                <Item AmountMin="100" AmountMax="1000">
+                    <Frequency>1.0</Frequency>
+                    <Id>
+                        <TypeId>Component</TypeId>
+                        <SubtypeId>Reactor</SubtypeId>
+                    </Id>
+                </Item>
+                <Item AmountMin="100" AmountMax="1000">
+                    <Frequency>1.0</Frequency>
+                    <Id>
+                        <TypeId>Component</TypeId>
+                        <SubtypeId>Thrust</SubtypeId>
+                    </Id>
+                </Item>
+                <Item AmountMin="20" AmountMax="50">
+                    <Frequency>1.0</Frequency>
+                    <Id>
+                        <TypeId>Component</TypeId>
+                        <SubtypeId>GravityGenerator</SubtypeId>
+                    </Id>
+                </Item>
+                <Item AmountMin="50" AmountMax="500">
+                    <Frequency>1.0</Frequency>
+                    <Id>
+                        <TypeId>Component</TypeId>
+                        <SubtypeId>RadioCommunication</SubtypeId>
+                    </Id>
+                </Item>
+                <Item AmountMin="50" AmountMax="500">
+                    <Frequency>1.0</Frequency>
+                    <Id>
+                        <TypeId>Component</TypeId>
+                        <SubtypeId>Detector</SubtypeId>
+                    </Id>
+                </Item>
+                <Item AmountMin="100" AmountMax="1000">
+                    <Frequency>1.0</Frequency>
+                    <Id>
+                        <TypeId>Component</TypeId>
+                        <SubtypeId>SolarCell</SubtypeId>
+                    </Id>
+                </Item>
+                <Item AmountMin="100" AmountMax="1000">
+                    <Frequency>1.0</Frequency>
+                    <Id>
+                        <TypeId>Component</TypeId>
+                        <SubtypeId>PowerCell</SubtypeId>
+                    </Id>
+                </Item>
+                <Item AmountMin="50" AmountMax="1000">
+                    <Frequency>1.0</Frequency>
+                    <Id>
+                        <TypeId>Component</TypeId>
+                        <SubtypeId>Canvas</SubtypeId>
+                    </Id>
+                </Item>
+                <Item AmountMin="50" AmountMax="500">
+                    <Frequency>1.0</Frequency>
+                    <Id>
+                        <TypeId>Component</TypeId>
+                        <SubtypeId>Medical</SubtypeId>
+                    </Id>
+                </Item>
+            </Items>
+        </ContainerType>
+
+    </ContainerTypes>
+</Definitions>

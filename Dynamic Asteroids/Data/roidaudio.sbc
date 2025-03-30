@@ -8,10 +8,10 @@
 				<SubtypeId>roidbreak</SubtypeId>
 			</Id>
 			<Category>SHOT</Category>
-			<MaxDistance>5000</MaxDistance>
+			<MaxDistance>1000</MaxDistance>
 			<PreventSynchronization>0</PreventSynchronization>
-			<Volume>1</Volume>
-			<SoundLimit>100</SoundLimit>
+			<Volume>0.1</Volume>
+			<SoundLimit>10</SoundLimit>
 			<PitchVariation>100</PitchVariation>
 			<Pitch>2</Pitch>
 			<Loopable>false</Loopable>

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Factions>
+
+    <Faction Tag="ECO-NPC" Founder="John Enceladus">
+      <Id>
+        <TypeId>MyObjectBuilder_FactionDefinition</TypeId>
+        <SubtypeId>ECO-NPC</SubtypeId>
+      </Id>
+      <DisplayName>Enceladus Corporation</DisplayName>
+      <IsDefault>true</IsDefault>
+      <StartingBalance>1000000000</StartingBalance>
+      <Type>Trader</Type>
+      <AcceptHumans>true</AcceptHumans>
+      <AutoAcceptMember>false</AutoAcceptMember>
+      <AutoAcceptPeace>false</AutoAcceptPeace>
+      <DiscoveredByDefault>true</DiscoveredByDefault>
+      <DefaultRelation>Neutral</DefaultRelation>
+      <Description>The combined assets of several wealthy CEOs and government entities with the goal of harvesting the rings of Saturn for its riches.</Description>
+      <FactionIcon>Textures\ECO.png</FactionIcon>
+    </Faction>
+
+  </Factions>
+</Definitions>

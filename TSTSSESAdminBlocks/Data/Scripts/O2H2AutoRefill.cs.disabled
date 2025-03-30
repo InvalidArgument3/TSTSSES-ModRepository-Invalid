@@ -1,0 +1,50 @@
+﻿using Sandbox.Common.ObjectBuilders;
+using Sandbox.Game;
+using SpaceEngineers.Game.ModAPI;
+using VRage.Game;
+using VRage.Game.Components;
+using VRage.ModAPI;
+using VRage.ObjectBuilders;
+using IMyInventory = VRage.Game.ModAPI.IMyInventory;
+
+namespace Klime.O2H2AutoRefill
+{
+    [MyEntityComponentDescriptor(typeof(MyObjectBuilder_OxygenGenerator), false, "AdminGrid_OxygenGenerator")]
+    public class O2H2AutoRefill : MyGameLogicComponent
+    {
+        private IMyOxygenGenerator O2H2Gen;
+        private IMyInventory O2H2inv;
+        private MyObjectBuilder_Ore O2H2ore = new MyObjectBuilder_Ore();
+
+        public override void Init(MyObjectBuilder_EntityBase objectBuilder)
+        {
+            O2H2Gen = Entity as IMyOxygenGenerator;
+			O2H2ore.SubtypeName = "AdminIce";
+            NeedsUpdate = MyEntityUpdateEnum.EACH_100TH_FRAME;
+            if (O2H2Gen != null)
+            {
+                O2H2inv = O2H2Gen.GetInventory();
+            }
+        }
+
+        public void UpdateInventory()
+        {
+            if (O2H2inv != null)
+            {
+                O2H2inv.AddItems(100,O2H2ore);
+            }
+        }
+
+        public override void UpdateBeforeSimulation100()
+        {
+            if (O2H2Gen.CubeGrid.Physics != null)
+            {
+                UpdateInventory();
+            }
+        }
+
+        public override void Close()
+        {
+        }
+    }
+}

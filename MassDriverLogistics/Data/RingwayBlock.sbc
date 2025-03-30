@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <CubeBlocks>
+    <Definition xsi:type="MyObjectBuilder_PoweredCargoContainerDefinition">
+      <Id>
+        <TypeId>Collector</TypeId>
+        <SubtypeId>RingwayCore</SubtypeId>
+      </Id>
+      <DisplayName>Ringway Core</DisplayName>
+      <Icon>Textures\GUI\Icons\Cubes\RingwayCore.dds</Icon>
+      <Description>Use the [REDACTED] within Saturn's magnetic field to transport you across space. Power consumption scales with distance. 1GW continuous power is needed to charge.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="3" y="3" z="3" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models\RingwayCore.mwm</Model>
+      <Components>
+        <Component Subtype="RedactedComponent" Count="1" >
+          <DeconstructId>
+            <TypeId>Ore</TypeId>
+            <SubtypeId>Scrap</SubtypeId>
+          </DeconstructId>
+        </Component>
+        <Component Subtype="SteelPlate" Count="20000" />
+        <Component Subtype="Construction" Count="1000" />
+        <Component Subtype="Computer" Count="2500" />
+        <Component Subtype="Construction" Count="2000" />
+        <Component Subtype="SteelPlate" Count="6000" />
+      </Components>
+      <CriticalComponent Subtype="RedactedComponent" Index="0" />
+      <BuildProgressModels>
+      </BuildProgressModels>
+      <BlockPairName>RingwayCore</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <BuildTimeSeconds>400</BuildTimeSeconds>
+      <ResourceSinkGroup>Conveyors</ResourceSinkGroup>
+      <RequiredPowerInput>0.002</RequiredPowerInput>
+      <InventorySize>
+        <X>1</X>
+        <Y>1</Y>
+        <Z>1</Z>
+      </InventorySize>
+      <Public>true</Public>
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Extended</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>15</PCU>
+      <IsAirTight>true</IsAirTight>
+      <ActionList>
+        <Action>
+          <Id>Jump</Id>
+          <Name>Jump</Name>
+        </Action>
+        <Action>
+          <Id>ToggleShowSphere</Id>
+          <Name>Toggle Show Sphere</Name>
+        </Action>
+      </ActionList>
+    </Definition>
+  </CubeBlocks>
+  <BlockVariantGroups>
+    <BlockVariantGroup>
+      <Id>RingwayBlockGroup</Id>
+      <Icon>Textures\GUI\Icons\Cubes\TeleportGatewayIcon.dds</Icon>
+      <DisplayName>Ringway</DisplayName>
+      <Description>Ringway</Description>
+      <Blocks>
+        <RingwayBlock Type="BatteryBlock" Subtype="RingwayCore"/>
+        <RingwayBlock Type="BatteryBlock" Subtype="SmallRingwayCore"/>
+      </Blocks>
+    </BlockVariantGroup>
+  </BlockVariantGroups>
+</Definitions>

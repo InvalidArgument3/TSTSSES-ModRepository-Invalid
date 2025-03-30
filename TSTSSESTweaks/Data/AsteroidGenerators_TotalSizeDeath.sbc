@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<Definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <AsteroidGenerators>
+
+        <!-- Common Asteroid generator -->
+        <!-- Since 205 can no longer spawn encounters. Use 6 version of generator to change spawn of encounters-->
+        <AsteroidGenerator>
+            <Id>
+                <TypeId>AsteroidGeneratorDefinition</TypeId>
+                <SubtypeId>4</SubtypeId>
+            </Id>
+            <SubCells>3</SubCells>
+            <ObjectSizeMin>128</ObjectSizeMin>
+            <ObjectSizeMax>512</ObjectSizeMax>
+            <RotateAsteroids>false</RotateAsteroids>
+            <UseGeneratorSeed>true</UseGeneratorSeed>
+            <ObjectMaxInCluster>10</ObjectMaxInCluster>
+            <ObjectSizeMinCluster>32</ObjectSizeMinCluster>
+            <ObjectSizeMaxCluster>256</ObjectSizeMaxCluster>
+            <ObjectDensityCluster>0.8</ObjectDensityCluster>
+            <UseClusterVariableSize>true</UseClusterVariableSize>
+            <UseClusterDefAsAsteroid>false</UseClusterDefAsAsteroid>
+            <ObjectMinDistanceInCluster>20</ObjectMinDistanceInCluster>
+            <ClusterDispersionAbsolute>true</ClusterDispersionAbsolute>
+            <ObjectMaxDistanceInClusterMin>200</ObjectMaxDistanceInClusterMin>
+            <ObjectMaxDistanceInClusterMax>1500</ObjectMaxDistanceInClusterMax>
+            <AllowPartialClusterObjectOverlap>true</AllowPartialClusterObjectOverlap>
+            <UseLinearPowOfTwoSizeDistribution>true</UseLinearPowOfTwoSizeDistribution>
+            <SeedTypeProbability>
+                <dictionary>
+                    <item>
+                        <Key>Asteroid</Key>
+                        <Value>300</Value>
+                    </item>
+                    <item>
+                        <Key>AsteroidCluster</Key>
+                        <Value>100</Value>
+                    </item>
+                    <item>
+                        <Key>EncounterAlone</Key><!--1.205:Keep this for not change asteroid generation-->
+                        <Value>15</Value>
+                    </item>
+                    <item>
+                        <Key>Empty</Key>
+                        <Value>0</Value>
+                    </item>
+                </dictionary>
+            </SeedTypeProbability>
+            <SeedClusterTypeProbability>
+                <dictionary>
+                    <item>
+                        <Key>Asteroid</Key>
+                        <Value>300</Value>
+                    </item>
+                    <item>
+                        <Key>EncounterSingle</Key><!--1.205:Keep this for not change asteroid generation-->
+                        <Value>0</Value>
+                    </item>
+                </dictionary>
+            </SeedClusterTypeProbability>
+        </AsteroidGenerator>
+
+  </AsteroidGenerators>
+</Definitions>
